@@ -6,7 +6,7 @@ import serverConfig from './frameworks/webserver/server';
 import connectToMongoDb from './frameworks/database/mongodb/connection';
 import connectToRedis from './frameworks/database/redis/connection';
 import routes from './frameworks/webserver/routes';
-import configKeys from './config';
+import AppError from './utils/appError';
 
 colors?.enable();
 
@@ -24,6 +24,11 @@ expressConfig(app);
 
 //* routes for each endpoint
 routes(app, redisClient);
+
+// * catch 404 and forward to error handler
+app.all('*', (req, res, next: NextFunction) => {
+    next(new AppError('Not Found', 404));
+});
 
 // * starting the server with server config
 serverConfig(server).startServer();
