@@ -1,9 +1,9 @@
-import dotenv from "dotenv";
+import dotenv from 'dotenv';
 dotenv.config();
 
 const configKeys = {
     MONGO_DB_URL: process.env.DATABASE as string,
-    
+
     PORT: process.env.PORT,
 
     DB_NAME: process.env.DB_NAME,
@@ -25,6 +25,10 @@ const configKeys = {
     PASSWORD_NODE_MAILER: process.env.EMAIL_PASSWORD as string,
 
     FROM_EMAIL_NODE_MAILER: process.env.FROM_EMAIL as string,
-}
 
-export default configKeys
+    DB_CLUSTER_URL: process.env.DB_CLUSTER_URL as string,
+
+    REDIS_URL: process.env.REDIS_URL as string,
+};
+
+export default configKeys;
