@@ -4,6 +4,7 @@ import { AuthServiceInterface } from '../app/services/authServiceInterface';
 import { AuthService } from '../frameworks/services/authService';
 import { StudentDbInterface } from '../app/repositories/studentsDbRepository';
 import { StudentRepositoryMongoDB } from './../frameworks/database/mongodb/repositories/studentsRepoMongoDb';
+import { studentLogin, studentRegister, signInWithGoogle } from '../app/usecases/auth/studentAuth.ts';
 
 const authController = (
     authServiceInterface: AuthServiceInterface,
