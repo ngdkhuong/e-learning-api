@@ -13,4 +13,6 @@ export const studentRepositoryMongoDB = () => {
         const user: StudentInterface | null = await Student.findOne({ email });
         return user;
     };
+
+    const getStudent = async;
 };
