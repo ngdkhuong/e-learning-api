@@ -1,4 +1,4 @@
-import { StudentInterface } from '../../../../types/studentInterface';
+import { StudentInterface, StudentUpdateInfo } from '../../../../types/studentInterface';
 import Student from '../models/student';
 import mongoose from 'mongoose';
 import { StudentRegisterInterface } from '@src/types/studentRegisterInterface';
@@ -14,5 +14,58 @@ export const studentRepositoryMongoDB = () => {
         return user;
     };
 
-    const getStudent = async;
+    const getStudent = async (id: string) => {
+        const student: StudentInterface | null = await Student.findById({
+            _id: new mongoose.Types.ObjectId(id),
+        });
+        return student;
+    };
+
+    const changePassword = async (id: string, password: string) => {
+        await Student.updateOne({ _id: new mongoose.Types.ObjectId(id) }, { password });
+    };
+
+    const updateProfile = async (id: string, studentInfo: StudentUpdateInfo) => {
+        await Student.updateOne({ _id: new mongoose.Types.ObjectId(id) }, { ...studentInfo });
+    };
+
+    const getAllStudents = async () => {
+        const students: StudentInterface[] | null = await Student.find({});
+        return students;
+    };
+
+    const blockStudent = async (id: string, reason: string) => {
+        await Student.updateOne({ _id: new mongoose.Types.ObjectId(id) }, { isBlocked: true, blockReason: reason });
+    };
+
+    const unblockStudent = async (id: string) => {
+        await Student.updateOne({ _id: new mongoose.Types.ObjectId(id) }, { isBlocked: false, blockReason: '' });
+    };
+
+    const getAllBlockedStudents = async () => {
+        const blockedStudents: StudentInterface[] | null = await Student.find({
+            isBlocked: true,
+        });
+        return blockedStudents;
+    };
+
+    const getTotalNumberOfStudents = async () => {
+        const total = await Student.find().countDocuments();
+        return total;
+    };
+
+    return {
+        addStudent,
+        getStudentByEmail,
+        getStudent,
+        changePassword,
+        updateProfile,
+        getAllStudents,
+        blockStudent,
+        unblockStudent,
+        getAllBlockedStudents,
+        getTotalNumberOfStudents,
+    };
 };
+
+export type StudentRepositoryMongoDB = typeof studentRepositoryMongoDB;
