@@ -7,6 +7,7 @@ import connectToMongoDb from './frameworks/database/mongodb/connection';
 import connectToRedis from './frameworks/database/redis/connection';
 import routes from './frameworks/webserver/routes';
 import AppError from './utils/appError';
+import errorHandlingMiddleware from './frameworks/webserver/middlewares/errorHandling';
 
 colors?.enable();
 
@@ -24,6 +25,9 @@ expressConfig(app);
 
 //* routes for each endpoint
 routes(app, redisClient);
+
+// * handles server side errors
+app.use(errorHandlingMiddleware);
 
 // * catch 404 and forward to error handler
 app.all('*', (req, res, next: NextFunction) => {
