@@ -1,5 +1,5 @@
 import mongoose, { Schema, model } from 'mongoose';
-import { AddCourseInfoInterface } from '../../../../types/courseInterface.ts';
+import { AddCourseInfoInterface } from '../../../../types/courseInterface';
 
 const fileSchema = new Schema({
     name: {
