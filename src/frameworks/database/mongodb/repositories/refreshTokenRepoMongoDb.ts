@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import RefreshToken from '../models/token';
 
 export const refreshTokenRepositoryMongoDB = () => {
-    const savedRefreshToken = async (userId: string, token: string, expiresAt: number) => {
+    const saveRefreshToken = async (userId: string, token: string, expiresAt: number) => {
         const refreshToken = new RefreshToken({
             userId,
             token,
@@ -22,7 +22,7 @@ export const refreshTokenRepositoryMongoDB = () => {
     };
 
     return {
-        savedRefreshToken,
+        saveRefreshToken,
         deleteRefreshToken,
         findRefreshToken,
     };
