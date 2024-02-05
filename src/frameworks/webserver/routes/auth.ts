@@ -6,6 +6,8 @@ import { studentRepositoryMongoDB } from './../../database/mongodb/repositories/
 import { studentDbRepository } from '../../../app/repositories/studentsDbRepository';
 import { refreshTokenDbRepository } from '../../../app/repositories/refreshTokenDBRepository';
 import { refreshTokenRepositoryMongoDB } from '../../../frameworks/database/mongodb/repositories/refreshTokenRepoMongoDb';
+import { googleAuthServiceInterface } from './../../../app/services/googleAuthServiceInterface';
+import { googleAuthService } from './../../services/googleAuthService';
 
 const authRouter = () => {
     const router = express.Router();
@@ -19,8 +21,8 @@ const authRouter = () => {
         studentRepositoryMongoDB,
         // instructorDbRepository ,
         // instructorDbRepositoryImpl ,
-        // googleAuthServiceInterface ,
-        // googleAuthServiceImpl ,
+        googleAuthServiceInterface,
+        googleAuthService,
         // adminDbRepository ,
         // adminDbRepositoryImpl ,
         refreshTokenDbRepository,
@@ -29,6 +31,8 @@ const authRouter = () => {
 
     // * Student
     router.post('/student-register', controller.registerStudent);
+    router.post('/student-login', controller.loginStudent);
+    router.post('/login-with-google', controller.loginWithGoogle);
 
     return router;
 };

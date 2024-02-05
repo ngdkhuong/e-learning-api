@@ -5,6 +5,7 @@ import { StudentDbInterface } from '../../repositories/studentsDbRepository';
 import { RefreshTokenDbInterface } from '../../repositories/refreshTokenDBRepository';
 import { AuthServiceInterface } from '../../services/authServiceInterface';
 import { StudentInterface } from '@src/types/studentInterface';
+import { GoogleAuthServiceInterface } from '../../../app/services/googleAuthServiceInterface';
 
 export const studentRegister = async (
     student: StudentRegisterInterface,
@@ -84,4 +85,50 @@ export const studentLogin = async (
     await refreshTokenRepository.saveRefreshToken(student._id, refreshToken, expirationDate);
 
     return { accessToken, refreshToken };
+};
+
+export const signInWithGoogle = async (
+    credential: string,
+    googleAuthService: ReturnType<GoogleAuthServiceInterface>,
+    studentRepository: ReturnType<StudentDbInterface>,
+    refreshTokenRepository: ReturnType<RefreshTokenDbInterface>,
+    authService: ReturnType<AuthServiceInterface>,
+) => {
+    const user = await googleAuthService.verify(credential);
+
+    const isUserExist = await studentRepository.getStudentByEmail(user.email);
+
+    if (isUserExist) {
+        const payload = {
+            Id: isUserExist._id,
+            email: isUserExist.email,
+            role: 'student',
+        };
+
+        await refreshTokenRepository.deleteRefreshToken(isUserExist._id);
+
+        const accessToken = authService.generateToken(payload);
+
+        const refreshToken = authService.generateRefreshToken(payload);
+
+        const expirationDate = authService.decodedTokenAndReturnExpireDate(refreshToken);
+
+        await refreshTokenRepository.saveRefreshToken(isUserExist._id, refreshToken, expirationDate);
+
+        return { accessToken, refreshToken };
+    } else {
+        const { _id: userId, email } = await studentRepository.addStudent(user);
+
+        const payload = { Id: userId, email, role: 'student' };
+
+        const accessToken = authService.generateToken(payload);
+
+        const refreshToken = authService.generateRefreshToken(payload);
+
+        const expirationDate = authService.decodedTokenAndReturnExpireDate(refreshToken);
+
+        await refreshTokenRepository.saveRefreshToken(userId, refreshToken, expirationDate);
+
+        return { accessToken, refreshToken };
+    }
 };
