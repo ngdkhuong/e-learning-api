@@ -9,4 +9,6 @@ export const instructorRegister = async (
     instructor: InstructorInterface,
     files: Express.Multer.File[],
     instructorRepository: ReturnType<InstructorDbInterface>,
+    authService: ReturnType<AuthServiceInterface>,
+    cloudService: ReturnType<CloudServiceInterface>,
 ) => {};

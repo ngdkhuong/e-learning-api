@@ -1,8 +1,8 @@
-import HttpStatusCodes from '@src/constants/HttpStatusCodes';
+import HttpStatusCodes from '../../constants/HttpStatusCodes';
 import { AuthServiceInterface } from '../services/authServiceInterface';
 import { StudentDbInterface, studentDbRepository } from '../repositories/studentsDbRepository';
-import AppError from '@src/utils/appError';
-import { StudentInterface, StudentUpdateInfo } from '@src/types/studentInterface';
+import AppError from '../../utils/appError';
+import { StudentInterface, StudentUpdateInfo } from '../../types/studentInterface';
 
 export const changePasswordU = async (
     id: string | undefined,
