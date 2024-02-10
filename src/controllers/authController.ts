@@ -10,6 +10,10 @@ import { RefreshTokenDbInterface } from '@src/app/repositories/refreshTokenDBRep
 import { RefreshTokenRepositoryMongoDb } from '@src/frameworks/database/mongodb/repositories/refreshTokenRepoMongoDb';
 import { GoogleAuthServiceInterface } from '@src/app/services/googleAuthServiceInterface';
 import { GoogleAuthService } from '@src/frameworks/services/googleAuthService';
+import { InstructorDbInterface } from '@src/app/repositories/instructorDbRepository';
+import { InstructorRepositoryMongoDb } from '@src/frameworks/database/mongodb/repositories/instructorRepoMongoDb';
+import { InstructorInterface } from '@src/types/instructorInterface';
+import { instructorRegister } from '../app/usecases/auth/instructorAuth';
 
 const authController = (
     authServiceInterface: AuthServiceInterface,
@@ -18,8 +22,8 @@ const authController = (
     // cloudServiceImpl: CloudServiceImpl,
     studentDbRepository: StudentDbInterface,
     studentDbRepositoryImpl: StudentRepositoryMongoDB,
-    // instructorDbRepository: InstructorDbInterface,
-    // instructorDbRepositoryImpl: InstructorRepositoryMongoDb,
+    instructorDbRepository: InstructorDbInterface,
+    instructorDbRepositoryImpl: InstructorRepositoryMongoDb,
     googleAuthServiceInterface: GoogleAuthServiceInterface,
     googleAuthServiceImpl: GoogleAuthService,
     // adminDbRepository: AdminDbInterface,
@@ -30,6 +34,8 @@ const authController = (
     const dbRepositoryUser = studentDbRepository(studentDbRepositoryImpl());
 
     const dbRepositoryRefreshToken = refreshTokenDbRepository(refreshTokenDbRepositoryImpl());
+
+    const dbRepositoryInstructor = instructorDbRepository(instructorDbRepositoryImpl());
 
     const authService = authServiceInterface(authServiceImpl());
 
@@ -86,10 +92,47 @@ const authController = (
         });
     });
 
+    // ? INSTRUCTOR
+    const registerInstructor = asyncHandler(async (req: Request, res: Response) => {
+        const files: Express.Multer.File[] = req.files as Express.Multer.File[];
+        const instructor: InstructorInterface = req.body;
+        await instructorRegister(
+            instructor,
+            files,
+            dbRepositoryInstructor,
+            authService,
+            // cloudService,
+        );
+        res.status(200).json({
+            status: 'success',
+            message:
+                'Your registration is pending verification by the administrators. You will receive an email once your registration is approved',
+        });
+    });
+
+    const loginInstructor = asyncHandler(async (req: Request, res: Response) => {
+        const { email, password }: { email: string; password: string } = req.body;
+        const { accessToken, refreshToken } = await instructorLogin(
+            email,
+            password,
+            dbRepositoryInstructor,
+            dbRepositoryRefreshToken,
+            authService,
+        );
+        res.status(200).json({
+            status: 'success',
+            message: 'Instructor logged in successfully',
+            accessToken,
+            refreshToken,
+        });
+    });
+
     return {
         registerStudent,
         loginStudent,
         loginWithGoogle,
+        registerInstructor,
+        loginInstructor,
     };
 };
 
