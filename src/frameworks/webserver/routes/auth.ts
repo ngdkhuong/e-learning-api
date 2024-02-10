@@ -8,6 +8,13 @@ import { refreshTokenDbRepository } from '../../../app/repositories/refreshToken
 import { refreshTokenRepositoryMongoDB } from '../../../frameworks/database/mongodb/repositories/refreshTokenRepoMongoDb';
 import { googleAuthServiceInterface } from './../../../app/services/googleAuthServiceInterface';
 import { googleAuthService } from './../../services/googleAuthService';
+import { cloudServiceInterface } from '@src/app/services/cloudServiceInterface';
+import { s3Service } from '@src/frameworks/services/s3CloudService';
+import { instructorDbRepository } from '@src/app/repositories/instructorDbRepository';
+import { instructorRepoMongoDb } from '@src/frameworks/database/mongodb/repositories/instructorRepoMongoDb';
+import { adminRepoMongoDb } from '@src/frameworks/database/mongodb/repositories/adminRepoMongoDb';
+import { adminDbRepository } from '@src/app/repositories/adminDbRepository';
+import upload from '../middlewares/multer';
 
 const authRouter = () => {
     const router = express.Router();
@@ -15,16 +22,16 @@ const authRouter = () => {
     const controller = authController(
         authServiceInterface,
         authService,
-        // cloudServiceInterface ,
-        // cloudServiceImpl ,
+        cloudServiceInterface,
+        s3Service,
         studentDbRepository,
         studentRepositoryMongoDB,
-        // instructorDbRepository ,
-        // instructorDbRepositoryImpl ,
+        instructorDbRepository,
+        instructorRepoMongoDb,
         googleAuthServiceInterface,
         googleAuthService,
-        // adminDbRepository ,
-        // adminDbRepositoryImpl ,
+        adminDbRepository,
+        adminRepoMongoDb,
         refreshTokenDbRepository,
         refreshTokenRepositoryMongoDB,
     );
@@ -33,6 +40,13 @@ const authRouter = () => {
     router.post('/student-register', controller.registerStudent);
     router.post('/student-login', controller.loginStudent);
     router.post('/login-with-google', controller.loginWithGoogle);
+
+    // * Instructor
+    router.post('/instructor/instructor-register', upload.array('images'), controller.registerInstructor);
+    router.post('/instructor/instructor-login', controller.loginInstructor);
+
+    // * Admin
+    router.post('/admin/admin-login', controller.loginAdmin);
 
     return router;
 };

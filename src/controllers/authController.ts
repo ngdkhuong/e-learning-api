@@ -13,21 +13,26 @@ import { GoogleAuthService } from '@src/frameworks/services/googleAuthService';
 import { InstructorDbInterface } from '@src/app/repositories/instructorDbRepository';
 import { InstructorRepositoryMongoDb } from '@src/frameworks/database/mongodb/repositories/instructorRepoMongoDb';
 import { InstructorInterface } from '@src/types/instructorInterface';
-import { instructorRegister } from '../app/usecases/auth/instructorAuth';
+import { instructorLogin, instructorRegister } from '../app/usecases/auth/instructorAuth';
+import { CloudServiceInterface } from '@src/app/services/cloudServiceInterface';
+import { CloudServiceImpl } from '@src/frameworks/services/s3CloudService';
+import { adminLogin } from '@src/app/usecases/auth/adminAuth';
+import { AdminDbInterface } from '@src/app/repositories/adminDbRepository';
+import { AdminRepositoryMongoDb } from '@src/frameworks/database/mongodb/repositories/adminRepoMongoDb';
 
 const authController = (
     authServiceInterface: AuthServiceInterface,
     authServiceImpl: AuthService,
-    // cloudServiceInterface: CloudServiceInterface,
-    // cloudServiceImpl: CloudServiceImpl,
+    cloudServiceInterface: CloudServiceInterface,
+    cloudServiceImpl: CloudServiceImpl,
     studentDbRepository: StudentDbInterface,
     studentDbRepositoryImpl: StudentRepositoryMongoDB,
     instructorDbRepository: InstructorDbInterface,
     instructorDbRepositoryImpl: InstructorRepositoryMongoDb,
     googleAuthServiceInterface: GoogleAuthServiceInterface,
     googleAuthServiceImpl: GoogleAuthService,
-    // adminDbRepository: AdminDbInterface,
-    // adminDbRepositoryImpl: AdminRepositoryMongoDb,
+    adminDbRepository: AdminDbInterface,
+    adminDbRepositoryImpl: AdminRepositoryMongoDb,
     refreshTokenDbRepository: RefreshTokenDbInterface,
     refreshTokenDbRepositoryImpl: RefreshTokenRepositoryMongoDb,
 ) => {
@@ -37,7 +42,11 @@ const authController = (
 
     const dbRepositoryInstructor = instructorDbRepository(instructorDbRepositoryImpl());
 
+    const dbRepositoryAdmin = adminDbRepository(adminDbRepositoryImpl());
+
     const authService = authServiceInterface(authServiceImpl());
+
+    const cloudService = cloudServiceInterface(cloudServiceImpl());
 
     const googleAuthService = googleAuthServiceInterface(googleAuthServiceImpl());
 
@@ -96,13 +105,7 @@ const authController = (
     const registerInstructor = asyncHandler(async (req: Request, res: Response) => {
         const files: Express.Multer.File[] = req.files as Express.Multer.File[];
         const instructor: InstructorInterface = req.body;
-        await instructorRegister(
-            instructor,
-            files,
-            dbRepositoryInstructor,
-            authService,
-            // cloudService,
-        );
+        await instructorRegister(instructor, files, dbRepositoryInstructor, authService, cloudService);
         res.status(200).json({
             status: 'success',
             message:
@@ -127,12 +130,33 @@ const authController = (
         });
     });
 
+    // ? ADMIN
+    const loginAdmin = asyncHandler(async (req: Request, res: Response) => {
+        const { email, password }: { email: string; password: string } = req.body;
+
+        const { accessToken, refreshToken } = await adminLogin(
+            email,
+            password,
+            dbRepositoryAdmin,
+            dbRepositoryRefreshToken,
+            authService,
+        );
+
+        res.status(200).json({
+            status: 'success',
+            message: 'Successfully logged in',
+            accessToken,
+            refreshToken,
+        });
+    });
+
     return {
         registerStudent,
         loginStudent,
         loginWithGoogle,
         registerInstructor,
         loginInstructor,
+        loginAdmin,
     };
 };
 
