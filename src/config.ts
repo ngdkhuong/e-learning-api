@@ -29,6 +29,16 @@ const configKeys = {
     DB_CLUSTER_URL: process.env.DB_CLUSTER_URL as string,
 
     REDIS_URL: process.env.REDIS_URL as string,
+
+    AWS_ACCESS_KEY: process.env.AWS_ACCESS_KEY as string,
+
+    AWS_BUCKET_REGION: process.env.AWS_SECRET_KEY as string,
+
+    AWS_SECRET_KEY: process.env.AWS_BUCKET_REGION as string,
+
+    AWS_BUCKET_NAME: process.env.AWS_BUCKET_NAME as string,
+
+    CLOUDFRONT_DISTRIBUTION_ID: process.env.CLOUDFRONT_DISTRIBUTION_ID as string,
 };
 
 export default configKeys;

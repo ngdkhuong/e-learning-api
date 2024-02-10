@@ -11,5 +11,16 @@ export const cloudServiceInterface = (service: ReturnType<CloudServiceImpl>) => 
 
     const getCloudFrontUrl = async (fileKey: string) => await service.getCloudFrontUrl(fileKey);
 
-    const removeFile = async (fileKey: string) => 
+    const removeFile = async (fileKey: string) => await service.removeFile(fileKey);
+
+    return {
+        upload,
+        uploadAndGetUrl,
+        getFile,
+        getVideoStream,
+        getCloudFrontUrl,
+        removeFile,
+    };
 };
+
+export type CloudServiceInterface = typeof cloudServiceInterface;
