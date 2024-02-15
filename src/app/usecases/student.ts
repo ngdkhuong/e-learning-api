@@ -3,6 +3,7 @@ import { AuthServiceInterface } from '../services/authServiceInterface';
 import { StudentDbInterface, studentDbRepository } from '../repositories/studentsDbRepository';
 import AppError from '../../utils/appError';
 import { StudentInterface, StudentUpdateInfo } from '../../types/studentInterface';
+import { CloudServiceInterface } from '../services/cloudServiceInterface';
 
 export const changePasswordU = async (
     id: string | undefined,
