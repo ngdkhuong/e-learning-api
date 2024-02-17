@@ -1,13 +1,27 @@
+import { Request, Response } from 'express';
+import asyncHandler from 'express-async-handler';
 import { CourseDbRepositoryInterface } from '@src/app/repositories/courseDbRepository';
 import { InstructorDbInterface } from '@src/app/repositories/instructorDbRepository';
 import { AuthServiceInterface } from '@src/app/services/authServiceInterface';
 import { CloudServiceInterface } from '@src/app/services/cloudServiceInterface';
 import { SendEmailServiceInterface } from '@src/app/services/sendEmailServiceInterface';
+import {
+    acceptInstructorRequest,
+    blockInstructors,
+    getAllInstructorRequests,
+    getAllInstructors,
+    getBlockedInstructors,
+    getInstructorByIdUseCase,
+    rejectInstructorRequest,
+    unblockInstructors,
+} from '@src/app/usecases/management/instructorManagement';
 import { CourseRepositoryMongoDbInterface } from '@src/frameworks/database/mongodb/repositories/courseRepoMongoDb';
 import { InstructorRepositoryMongoDb } from '@src/frameworks/database/mongodb/repositories/instructorRepoMongoDb';
 import { AuthService } from '@src/frameworks/services/authService';
 import { CloudServiceImpl } from '@src/frameworks/services/s3CloudService';
 import { SendEmailService } from '@src/frameworks/services/sendEmailService';
+import { CustomRequest } from '@src/types/customRequest';
+import { changePasswordU, getStudentsForInstructorsU, updateProfileU } from '@src/app/usecases/instructor';
 
 const instructorController = (
     authServiceInterface: AuthServiceInterface,
@@ -30,4 +44,140 @@ const instructorController = (
     const emailService = emailServiceInterface(emailServiceImpl());
 
     const cloudService = cloudServiceInterface(cloudServiceImpl());
+
+    // ? INSTRUCTOR MANAGEMENT
+    const getInstructorRequests = asyncHandler(async (req: Request, res: Response) => {
+        const response = await getAllInstructorRequests(dbRepositoryInstructor);
+        res.status(200).json({
+            status: 'success',
+            message: 'Successfully retrieved all instructor requests',
+            data: response,
+        });
+    });
+
+    const verifyInstructor = asyncHandler(async (req: Request, res: Response) => {
+        const instructorId: string = req.params.instructorId;
+        const response = await acceptInstructorRequest(instructorId, dbRepositoryInstructor, emailService);
+        res.status(200).json({
+            status: 'success',
+            message: 'Successfully accepted instructor request',
+            data: response,
+        });
+    });
+
+    const rejectRequest = asyncHandler(async (req: Request, res: Response) => {
+        const { instructorId, reason }: { instructorId: string; reason: string } = req.body;
+        const response = await rejectInstructorRequest(instructorId, reason, dbRepositoryInstructor, emailService);
+        res.status(200).json({
+            status: 'success',
+            message: 'Successfully rejected instructor request',
+            data: response,
+        });
+    });
+
+    const getAllInstructor = asyncHandler(async (req: Request, res: Response) => {
+        const instructors = await getAllInstructors(cloudService, dbRepositoryInstructor);
+        res.status(200).json({
+            status: 'success',
+            message: 'Successfully fetched all instructor information',
+            data: instructors,
+        });
+    });
+
+    const blockInstructor = asyncHandler(async (req: Request, res: Response) => {
+        const { instructorId, reason }: { instructorId: string; reason: string } = req.body;
+        const response = await blockInstructors(instructorId, reason, dbRepositoryInstructor);
+        res.status(200).json({
+            status: 'success',
+            message: 'Successfully blocked the instructor',
+            data: response,
+        });
+    });
+
+    const unblockInstructor = asyncHandler(async (req: Request, res: Response) => {
+        const instructorId: string = req.params.instructorId;
+        const response = await unblockInstructors(instructorId, dbRepositoryInstructor);
+        res.status(200).json({
+            status: 'success',
+            message: 'Successfully unblocked the instructor',
+            data: response,
+        });
+    });
+
+    const getBlockedInstructor = asyncHandler(async (req: Request, res: Response) => {
+        const response = await getBlockedInstructors(cloudService, dbRepositoryInstructor);
+        res.status(200).json({
+            status: 'success',
+            message: 'Successfully fetched blocked instructors',
+            data: response,
+        });
+    });
+
+    const getInstructorById = asyncHandler(async (req: CustomRequest, res: Response) => {
+        let instructorId = req.params.instructorId;
+        const response = await getInstructorByIdUseCase(instructorId, cloudService, dbRepositoryInstructor);
+        res.status(200).json({
+            status: 'success',
+            message: 'Successfully fetched instructor info',
+            data: response,
+        });
+    });
+
+    const updateProfile = asyncHandler(async (req: CustomRequest, res: Response) => {
+        const instructorId = req.user?.Id;
+        const instructorInfo = req.body;
+        const profilePic: Express.Multer.File = req.file as Express.Multer.File;
+        await updateProfileU(instructorId, instructorInfo, profilePic, cloudService, dbRepositoryInstructor);
+        res.status(200).json({
+            status: 'success',
+            message: 'Successfully updated profile',
+            data: null,
+        });
+    });
+
+    const changePassword = asyncHandler(async (req: CustomRequest, res: Response) => {
+        const passwordInfo: { currentPassword: string; newPassword: string } = req.body;
+        const instructorId: string | undefined = req.user?.Id;
+        await changePasswordU(instructorId, passwordInfo, authService, dbRepositoryInstructor);
+        res.status(200).json({
+            status: 'success',
+            message: 'Successfully reset password',
+            data: null,
+        });
+    });
+
+    const getStudentsForInstructors = asyncHandler(async (req: CustomRequest, res: Response) => {
+        const instructorId: string | undefined = req.user?.Id;
+        const students = await getStudentsForInstructorsU(instructorId, cloudService, dbRepositoryCourse);
+        res.status(200).json({
+            status: 'success',
+            message: 'Successfully retrieved all students',
+            data: students,
+        });
+    });
+
+    const getInstructorDetails = asyncHandler(async (req: CustomRequest, res: Response) => {
+        const instructorId = req.user?.Id;
+        const instructor = await getInstructorByIdUseCase(instructorId ?? '', cloudService, dbRepositoryInstructor);
+        res.status(200).json({
+            status: 'success',
+            message: 'Successfully retrieved instructor details...',
+            data: instructor,
+        });
+    });
+
+    return {
+        getInstructorRequests,
+        verifyInstructor,
+        rejectRequest,
+        getAllInstructor,
+        blockInstructor,
+        unblockInstructor,
+        getBlockedInstructor,
+        getInstructorById,
+        updateProfile,
+        changePassword,
+        getStudentsForInstructors,
+        getInstructorDetails,
+    };
 };
