@@ -42,7 +42,7 @@ export const changePasswordU = async (
 };
 
 export const updateProfileU = async (
-    id: string,
+    id: string | undefined,
     instructorInfo: SavedInstructorInterface,
     profilePic: Express.Multer.File,
     cloudService: ReturnType<CloudServiceInterface>,
