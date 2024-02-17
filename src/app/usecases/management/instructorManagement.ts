@@ -2,6 +2,7 @@ import { InstructorDbInterface } from '@src/app/repositories/instructorDbReposit
 import AppError from '../../../utils/appError';
 import HttpStatusCodes from './../../../constants/HttpStatusCodes';
 import { CloudServiceInterface } from '@src/app/services/cloudServiceInterface';
+import { SendEmailService } from '@src/frameworks/services/sendEmailService';
 
 export const getAllInstructorRequests = async (instructorRepository: ReturnType<InstructorDbInterface>) => {
     const allRequests = await instructorRepository.getInstructorRequests();
@@ -16,7 +17,7 @@ export const getAllInstructorRequests = async (instructorRepository: ReturnType<
 export const acceptInstructorRequest = async (
     instructorId: string,
     instructorRepository: ReturnType<InstructorDbInterface>,
-    // emailService: ReturnType<SendEmailService>,
+    emailService: ReturnType<SendEmailService>,
 ) => {
     if (!instructorId) {
         throw new AppError('Invalid instructor id', HttpStatusCodes.BAD_REQUEST);
@@ -24,9 +25,9 @@ export const acceptInstructorRequest = async (
 
     const response = await instructorRepository.acceptInstructorRequest(instructorId);
 
-    // if (response) {
-    //     emailService.sendEmail(response.email, 'Successfully verified your profile', 'You are verified');
-    // }
+    if (response) {
+        emailService.sendEmail(response.email, 'Successfully verified your profile', 'You are verified');
+    }
 
     return response;
 };
@@ -35,7 +36,7 @@ export const rejectInstructorRequest = async (
     instructorId: string,
     reason: string,
     instructorRepository: ReturnType<InstructorDbInterface>,
-    // emailService: ReturnType<SendEmailService>,
+    emailService: ReturnType<SendEmailService>,
 ) => {
     if (!instructorId || !reason) {
         throw new AppError('Instructor Id or reason cannot be empty.', HttpStatusCodes.BAD_REQUEST);
@@ -49,9 +50,9 @@ export const rejectInstructorRequest = async (
 
     const response = await instructorRepository.rejectInstructorRequest(instructorId, reason);
 
-    // if (response) {
-    //     emailService.sendEmail(response.email, 'Your request is rejected', reason);
-    // }
+    if (response) {
+        emailService.sendEmail(response.email, 'Your request is rejected', reason);
+    }
 
     return response;
 };
