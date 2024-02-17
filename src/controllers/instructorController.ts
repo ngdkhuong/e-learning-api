@@ -181,3 +181,5 @@ const instructorController = (
         getInstructorDetails,
     };
 };
+
+export default instructorController;
