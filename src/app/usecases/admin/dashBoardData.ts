@@ -1,6 +1,6 @@
-import { CourseDbRepositoryInterface } from '@src/app/repositories/courseDbRepository';
-import { InstructorDbInterface } from '@src/app/repositories/instructorDbRepository';
-import { StudentDbInterface } from '@src/app/repositories/studentsDbRepository';
+import { CourseDbRepositoryInterface } from '../../../app/repositories/courseDbRepository';
+import { InstructorDbInterface } from '../../../app/repositories/instructorDbRepository';
+import { StudentDbInterface } from '../../../app/repositories/studentsDbRepository';
 
 export const getDashBoardDetailsU = async (
     dbRepositoryCourse: ReturnType<CourseDbRepositoryInterface>,
