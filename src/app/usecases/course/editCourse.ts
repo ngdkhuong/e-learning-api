@@ -1,14 +1,14 @@
 import AppError from '../../../utils/appError';
 import { CourseDbRepositoryInterface } from '../../repositories/courseDbRepository';
 import { CloudServiceInterface } from '../../services/cloudServiceInterface';
-import { AddCourseInfoInterface } from '../../../types/courseInterface';
+import { EditCourseInfo } from '../../../types/courseInterface';
 import HttpStatusCodes from '../../../constants/HttpStatusCodes';
 
-export const addCourses = async (
+export const editCourseU = async (
     courseId: string,
     instructorId: string | undefined,
     files: Express.Multer.File[],
-    courseInfo: AddCourseInfoInterface,
+    courseInfo: EditCourseInfo,
     cloudService: ReturnType<CloudServiceInterface>,
     courseDbRepository: ReturnType<CourseDbRepositoryInterface>,
 ) => {
