@@ -6,8 +6,16 @@ import { CloudServiceInterface } from '../app/services/cloudServiceInterface';
 import { CourseRepositoryMongoDbInterface } from '../frameworks/database/mongodb/repositories/courseRepoMongoDb';
 import { RedisRepositoryImpl } from '../frameworks/database/redis/redisCacheRepository';
 import { CloudServiceImpl } from '../frameworks/services/s3CloudService';
-import { NextFunction, Response } from 'express';
-import { AddCourseInfoInterface } from '../types/courseInterface';
+import { Request, NextFunction, Response } from 'express';
+import { AddCourseInfoInterface, EditCourseInfo } from '../types/courseInterface';
+import { addCourses } from '@src/app/usecases/course/addCourse';
+import asyncHandler from 'express-async-handler';
+import { editCourseU } from '@src/app/usecases/course/editCourse';
+import { getAllCourseU, getCourseByIdU, getCourseByStudentU } from '@src/app/usecases/course/listCourse';
+import { getCourseByInstructorU } from '@src/app/usecases/course/viewCourse';
+import { AddDiscussionInterface } from '@src/types/discussion';
+import { getRecommendedCourseByStudentU, getTrendingCourseU } from '@src/app/usecases/course/recommendation';
+import { searchCourseU } from '@src/app/usecases/course/search';
 
 const courseController = (
     cloudServiceInterface: CloudServiceInterface,
@@ -44,6 +52,274 @@ const courseController = (
         const course: AddCourseInfoInterface = req.body;
         const files: Express.Multer.File[] = req.files as Express.Multer.File[];
         const instructorId = req.user?.Id;
-        const response = await addCourses();
+        const response = await addCourses(instructorId, course, files, cloudService, dbRepositoryCourse);
+        console.log(response);
+        res.status(200).json({
+            status: 'success',
+            message: 'Successfully added new course, course will be published after verification',
+            data: response,
+        });
     });
+
+    const editCourse = asyncHandler(async (req: CustomRequest, res: Response) => {
+        const course: EditCourseInfo = req.body;
+        const files: Express.Multer.File[] = req.files as Express.Multer.File[];
+        const instructorId = req.user?.Id;
+        const courseId: string = req.params.courseId;
+        const response = await editCourseU(courseId, instructorId, files, course, cloudService, dbRepositoryCourse);
+        res.status(200).json({
+            status: 'success',
+            message: 'Successfully updated the course',
+            data: response,
+        });
+    });
+
+    const getAllCourses = asyncHandler(async (req: Request, res: Response) => {
+        const courses = await getAllCourseU(cloudService, dbRepositoryCourse);
+        const cacheOptions = {
+            key: 'all-courses',
+            expireTimeSec: 600,
+            data: JSON.stringify(courses),
+        };
+        await dbRepositoryCache.setCache(cacheOptions);
+        res.status(200).json({
+            status: 'success',
+            message: 'Successfully retrieved all courses',
+            data: courses,
+        });
+    });
+
+    const getIndividualCourse = asyncHandler(async (req: Request, res: Response) => {
+        const courseId: string = req.params.courseId;
+        const course = await getCourseByIdU(courseId, cloudService, dbRepositoryCourse);
+        console.log(course);
+        res.status(200).json({
+            status: 'success',
+            message: 'Successfully retrieved the course',
+            data: course,
+        });
+    });
+
+    const getCoursesByInstructor = asyncHandler(async (req: CustomRequest, res: Response) => {
+        const instructorId = req.user?.Id;
+        const courses = await getCourseByInstructorU(instructorId, cloudService, dbRepositoryCourse);
+        res.status(200).json({
+            status: 'success',
+            message: 'Successfully retrieved your courses',
+            data: courses,
+        });
+    });
+
+    const addLesson = asyncHandler(async (req: CustomRequest, res: Response) => {
+        const instructorId = req.user?.Id;
+        const courseId = req.params.courseId;
+        const lesson = req.body;
+        const medias = req.files as Express.Multer.File[];
+        const questions = JSON.parse(lesson.questions);
+        lesson.questions = questions;
+        await addLessonsU(medias, courseId, instructorId, lesson, dbRepositoryLesson, cloudService, dbRepositoryQuiz);
+        res.status(200).json({
+            status: 'success',
+            message: 'Successfully added new lesson',
+            data: null,
+        });
+    });
+
+    const editLesson = asyncHandler(async (req: CustomRequest, res: Response) => {
+        const lesson = req.body;
+        const lessonId = req.params.lessonId;
+        const medias = req.files as Express.Multer.File[];
+        const questions = JSON.parse(lesson.questions);
+        lesson.questions = questions;
+        await editLessonsU(medias, lessonId, lesson, dbRepositoryLesson, cloudService, dbRepositoryQuiz);
+        res.status(200).json({
+            status: 'success',
+            message: 'Successfully updated the lesson',
+            data: null,
+        });
+    });
+
+    const getLessonsByCourse = asyncHandler(async (req: Request, res: Response) => {
+        const courseId = req.params.courseId;
+        const lessons = await getLessonsByCourseIdU(courseId, dbRepositoryLesson);
+        res.status(200).json({
+            status: 'success',
+            message: 'Successfully retrieved lessons based on the course',
+            data: lessons,
+        });
+    });
+
+    const getLessonById = asyncHandler(async (req: Request, res: Response) => {
+        const lessonId = req.params.lessonId;
+        const lesson = await getLessonByIdU(lessonId, dbRepositoryLesson);
+        res.status(200).json({
+            status: 'success',
+            message: 'Successfully retrieved lesson id',
+            data: lesson,
+        });
+    });
+
+    const getQuizzesByLesson = asyncHandler(async (req: Request, res: Response) => {
+        const lessonId = req.params.lessonId;
+        const quizzes = await getQuizzesLessonU(lessonId, dbRepositoryQuiz);
+        res.status(200).json({
+            status: 'success',
+            message: 'Successfully retrieved quizzes based on the lesson',
+            data: quizzes,
+        });
+    });
+
+    const addDiscussion = asyncHandler(async (req: CustomRequest, res: Response) => {
+        const lessonId: string = req.params.lessonId;
+        const userId = req.user?.Id;
+        const discussion: AddDiscussionInterface = req.body;
+        await addDiscussionU(userId, lessonId, discussion, dbRepositoryDiscussion);
+        res.status(200).json({
+            status: 'success',
+            message: 'Successfully posted your comment',
+            data: null,
+        });
+    });
+
+    const getDiscussionsByLesson = asyncHandler(async (req: Request, res: Response) => {
+        const lessonId: string = req.params.lessonId;
+        const discussion = await getDiscussionsByLessonU(lessonId, dbRepositoryDiscussion);
+        res.status(200).json({
+            status: 'success',
+            message: 'Successfully retrieved discussions based on the lesson',
+            data: discussion,
+        });
+    });
+
+    const editDiscussions = asyncHandler(async (req: Request, res: Response) => {
+        const discussionId: string = req.params.discussionId;
+        const message: string = req.body.message;
+        await editDiscussionU(discussionId, message, dbRepositoryDiscussion);
+        res.status(200).json({
+            status: 'success',
+            message: 'Successfully edited your comment',
+            data: null,
+        });
+    });
+
+    const deleteDiscussion = asyncHandler(async (req: Request, res: Response) => {
+        const discussionId: string = req.params.discussionId;
+        await deleteDiscussionByIdU(discussionId, dbRepositoryDiscussion);
+        res.status(200).json({
+            status: 'success',
+            message: 'Successfully deleted your comment',
+            data: null,
+        });
+    });
+
+    const replyDiscussion = asyncHandler(async (req: Request, res: Response) => {
+        const discussionId: string = req.params.discussionId;
+        const reply = req.body.reply;
+        await replyDiscussionU(discussionId, reply, dbRepositoryDiscussion);
+        res.status(200).json({
+            status: 'success',
+            message: 'Successfully replied to a comment',
+            data: null,
+        });
+    });
+
+    const getRepliesByDiscussion = asyncHandler(async (req: Request, res: Response) => {
+        const discussionId: string = req.params.discussionId;
+        const replies = await getRepliesByDiscussionIdU(discussionId, dbRepositoryDiscussion);
+        res.status(200).json({
+            status: 'success',
+            message: 'Successfully retrieved replies based on the discussion',
+            data: replies,
+        });
+    });
+
+    const enrollStudent = asyncHandler(async (req: CustomRequest, res: Response) => {
+        const paymentInfo: PaymentInfo = req.body;
+        const { courseId }: { courseId?: string } = req.params;
+        const { Id }: { Id?: string } = req.user || {};
+        const courseIdValue: string = courseId ?? '';
+        const studentId: string = Id ?? '';
+
+        await enrollStudentU(courseIdValue, studentId, paymentInfo, dbRepositoryCourse, dbRepositoryPayment);
+
+        res.status(200).json({
+            status: 'success',
+            message: 'Successfully enrolled into the course',
+            data: null,
+        });
+    });
+
+    const getRecommendedCourseByStudentInterest = asyncHandler(async (req: CustomRequest, res: Response) => {
+        const studentId: string = req.user?.Id ?? '';
+        const courses = await getRecommendedCourseByStudentU(studentId, cloudService, dbRepositoryCourse);
+        res.status(200).json({
+            status: 'success',
+            message: 'Successfully retrieved recommended courses',
+            data: courses,
+        });
+    });
+
+    const getTrendingCourses = asyncHandler(async (req: Request, res: Response) => {
+        const courses = await getTrendingCourseU(cloudService, dbRepositoryCourse);
+        res.status(200).json({
+            status: 'success',
+            message: 'Successfully retrieved trending courses',
+            data: courses,
+        });
+    });
+
+    const getCourseByStudent = asyncHandler(async (req: CustomRequest, res: Response) => {
+        const studentId: string | undefined = req.user?.Id;
+        const courses = await getCourseByStudentU(studentId, cloudService, dbRepositoryCourse);
+        res.status(200).json({
+            status: 'success',
+            message: 'Successfully retrieved courses based on students',
+            data: courses,
+        });
+    });
+
+    const searchCourse = asyncHandler(async (req: Request, res: Response) => {
+        const { search, filter } = req.query as { search: string; filter: string };
+        const key = search.trim() === '' ? search : filter;
+        const searchResult = await searchCourseU(search, filter, cloudService, dbRepositoryCourse);
+        if (searchResult.length) {
+            const cacheOptions = {
+                key: `${key}`,
+                expireTimeSec: 600,
+                data: JSON.stringify(searchResult),
+            };
+            await dbRepositoryCache.setCache(cacheOptions);
+        }
+        res.status(200).json({
+            status: 'success',
+            message: 'Successfully retrieved courses based on search query',
+            data: searchResult,
+        });
+    });
+
+    return {
+        addCourse,
+        editCourse,
+        getAllCourses,
+        getIndividualCourse,
+        getCoursesByInstructor,
+        addLesson,
+        editLesson,
+        getLessonsByCourse,
+        getLessonById,
+        getQuizzesByLesson,
+        addDiscussion,
+        getDiscussionsByLesson,
+        editDiscussions,
+        deleteDiscussion,
+        replyDiscussion,
+        getRepliesByDiscussion,
+        enrollStudent,
+        getRecommendedCourseByStudentInterest,
+        getTrendingCourses,
+        getCourseByStudent,
+        searchCourse,
+    };
 };
+
+export default courseController;
