@@ -8,7 +8,7 @@ import * as fs from 'fs';
 import ffmpeg from 'fluent-ffmpeg';
 import * as ffprobePath from 'ffprobe-static';
 
-export const addLessonU = async (
+export const addLessonsU = async (
     media: Express.Multer.File[] | undefined,
     courseId: string | undefined,
     instructorId: string | undefined,

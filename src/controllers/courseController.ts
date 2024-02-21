@@ -8,14 +8,20 @@ import { RedisRepositoryImpl } from '../frameworks/database/redis/redisCacheRepo
 import { CloudServiceImpl } from '../frameworks/services/s3CloudService';
 import { Request, NextFunction, Response } from 'express';
 import { AddCourseInfoInterface, EditCourseInfo } from '../types/courseInterface';
-import { addCourses } from '@src/app/usecases/course/addCourse';
+import { addCourses } from '../app/usecases/course/addCourse';
 import asyncHandler from 'express-async-handler';
-import { editCourseU } from '@src/app/usecases/course/editCourse';
-import { getAllCourseU, getCourseByIdU, getCourseByStudentU } from '@src/app/usecases/course/listCourse';
-import { getCourseByInstructorU } from '@src/app/usecases/course/viewCourse';
-import { AddDiscussionInterface } from '@src/types/discussion';
-import { getRecommendedCourseByStudentU, getTrendingCourseU } from '@src/app/usecases/course/recommendation';
-import { searchCourseU } from '@src/app/usecases/course/search';
+import { editCourseU } from '../app/usecases/course/editCourse';
+import { getAllCourseU, getCourseByIdU, getCourseByStudentU } from '../app/usecases/course/listCourse';
+import { getCourseByInstructorU } from '../app/usecases/course/viewCourse';
+import { AddDiscussionInterface } from '../types/discussion';
+import { getRecommendedCourseByStudentU, getTrendingCourseU } from '../app/usecases/course/recommendation';
+import { searchCourseU } from '../app/usecases/course/search';
+import { enrollStudentU } from '../app/usecases/course/enroll';
+import { addLessonsU } from '../app/usecases/lessons/addLesson';
+import { QuizDbInterface } from '../app/repositories/quizDbRepository';
+import { QuizRepositoryMongoDbInterface } from '../frameworks/database/mongodb/repositories/quizDbRepository';
+import { LessonDbRepositoryInterface } from '../app/repositories/lessonDbRepository';
+import { LessonRepositoryMongoDbInterface } from '../frameworks/database/mongodb/repositories/lessonRepoMongoDb';
 
 const courseController = (
     cloudServiceInterface: CloudServiceInterface,
