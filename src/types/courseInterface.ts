@@ -40,8 +40,8 @@ export interface AddQuizInfoInterface {
 }
 
 export interface EditQuizInfoInterface {
-    courseId: string;
-    lessonId: string;
+    courseId?: string;
+    lessonId?: string;
     questions: Question[];
 }
 
