@@ -5,20 +5,20 @@ import { AuthService } from '../frameworks/services/authService';
 import { StudentDbInterface } from '../app/repositories/studentsDbRepository';
 import { StudentRepositoryMongoDB } from './../frameworks/database/mongodb/repositories/studentsRepoMongoDb';
 import { studentLogin, studentRegister, signInWithGoogle } from '../app/usecases/auth/studentAuth';
-import { StudentRegisterInterface } from '@src/types/studentRegisterInterface';
-import { RefreshTokenDbInterface } from '@src/app/repositories/refreshTokenDBRepository';
-import { RefreshTokenRepositoryMongoDb } from '@src/frameworks/database/mongodb/repositories/refreshTokenRepoMongoDb';
-import { GoogleAuthServiceInterface } from '@src/app/services/googleAuthServiceInterface';
-import { GoogleAuthService } from '@src/frameworks/services/googleAuthService';
-import { InstructorDbInterface } from '@src/app/repositories/instructorDbRepository';
-import { InstructorRepositoryMongoDb } from '@src/frameworks/database/mongodb/repositories/instructorRepoMongoDb';
-import { InstructorInterface } from '@src/types/instructorInterface';
+import { StudentRegisterInterface } from '../types/studentRegisterInterface';
+import { RefreshTokenDbInterface } from '../app/repositories/refreshTokenDBRepository';
+import { RefreshTokenRepositoryMongoDb } from '../frameworks/database/mongodb/repositories/refreshTokenRepoMongoDb';
+import { GoogleAuthServiceInterface } from '../app/services/googleAuthServiceInterface';
+import { GoogleAuthService } from '../frameworks/services/googleAuthService';
+import { InstructorDbInterface } from '../app/repositories/instructorDbRepository';
+import { InstructorRepositoryMongoDb } from '../frameworks/database/mongodb/repositories/instructorRepoMongoDb';
+import { InstructorInterface } from '../types/instructorInterface';
 import { instructorLogin, instructorRegister } from '../app/usecases/auth/instructorAuth';
-import { CloudServiceInterface } from '@src/app/services/cloudServiceInterface';
-import { CloudServiceImpl } from '@src/frameworks/services/s3CloudService';
-import { adminLogin } from '@src/app/usecases/auth/adminAuth';
-import { AdminDbInterface } from '@src/app/repositories/adminDbRepository';
-import { AdminRepositoryMongoDb } from '@src/frameworks/database/mongodb/repositories/adminRepoMongoDb';
+import { CloudServiceInterface } from '../app/services/cloudServiceInterface';
+import { CloudServiceImpl } from '../frameworks/services/s3CloudService';
+import { adminLogin } from '../app/usecases/auth/adminAuth';
+import { AdminDbInterface } from '../app/repositories/adminDbRepository';
+import { AdminRepositoryMongoDb } from '../frameworks/database/mongodb/repositories/adminRepoMongoDb';
 
 const authController = (
     authServiceInterface: AuthServiceInterface,
