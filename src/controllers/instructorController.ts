@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
-import { CourseDbRepositoryInterface } from '@src/app/repositories/courseDbRepository';
-import { InstructorDbInterface } from '@src/app/repositories/instructorDbRepository';
-import { AuthServiceInterface } from '@src/app/services/authServiceInterface';
-import { CloudServiceInterface } from '@src/app/services/cloudServiceInterface';
-import { SendEmailServiceInterface } from '@src/app/services/sendEmailServiceInterface';
+import { CourseDbRepositoryInterface } from '../app/repositories/courseDbRepository';
+import { InstructorDbInterface } from '../app/repositories/instructorDbRepository';
+import { AuthServiceInterface } from '../app/services/authServiceInterface';
+import { CloudServiceInterface } from '../app/services/cloudServiceInterface';
+import { SendEmailServiceInterface } from '../app/services/sendEmailServiceInterface';
 import {
     acceptInstructorRequest,
     blockInstructors,
@@ -14,14 +14,14 @@ import {
     getInstructorByIdUseCase,
     rejectInstructorRequest,
     unblockInstructors,
-} from '@src/app/usecases/management/instructorManagement';
-import { CourseRepositoryMongoDbInterface } from '@src/frameworks/database/mongodb/repositories/courseRepoMongoDb';
-import { InstructorRepositoryMongoDb } from '@src/frameworks/database/mongodb/repositories/instructorRepoMongoDb';
-import { AuthService } from '@src/frameworks/services/authService';
-import { CloudServiceImpl } from '@src/frameworks/services/s3CloudService';
-import { SendEmailService } from '@src/frameworks/services/sendEmailService';
-import { CustomRequest } from '@src/types/customRequest';
-import { changePasswordU, getStudentsForInstructorsU, updateProfileU } from '@src/app/usecases/instructor';
+} from '../app/usecases/management/instructorManagement';
+import { CourseRepositoryMongoDbInterface } from '../frameworks/database/mongodb/repositories/courseRepoMongoDb';
+import { InstructorRepositoryMongoDb } from '../frameworks/database/mongodb/repositories/instructorRepoMongoDb';
+import { AuthService } from '../frameworks/services/authService';
+import { CloudServiceImpl } from '../frameworks/services/s3CloudService';
+import { SendEmailService } from '../frameworks/services/sendEmailService';
+import { CustomRequest } from '../types/customRequest';
+import { changePasswordU, getStudentsForInstructorsU, updateProfileU } from '../app/usecases/instructor';
 
 const instructorController = (
     authServiceInterface: AuthServiceInterface,
