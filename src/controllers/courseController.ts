@@ -22,6 +22,23 @@ import { QuizDbInterface } from '../app/repositories/quizDbRepository';
 import { QuizRepositoryMongoDbInterface } from '../frameworks/database/mongodb/repositories/quizDbRepository';
 import { LessonDbRepositoryInterface } from '../app/repositories/lessonDbRepository';
 import { LessonRepositoryMongoDbInterface } from '../frameworks/database/mongodb/repositories/lessonRepoMongoDb';
+import { editLessonsU } from '../app/usecases/lessons/editLesson';
+import { getLessonByIdU } from './../app/usecases/lessons/getLesson';
+import { getLessonsByCourseIdU } from './../app/usecases/lessons/viewLessons';
+import {
+    addDiscussionU,
+    deleteDiscussionByIdU,
+    editDiscussionU,
+    getDiscussionsByLessonU,
+    getRepliesByDiscussionIdU,
+    replyDiscussionU,
+} from './../app/usecases/lessons/discussions';
+import { DiscussionDbInterface } from '../app/repositories/discussionDbRepository';
+import { DiscussionRepoMongoDbInterface } from '../frameworks/database/mongodb/repositories/discussionsRepoMongoDb';
+import { PaymentInterface } from '../app/repositories/paymentDbRepository';
+import { PaymentImplInterface } from '../frameworks/database/mongodb/repositories/paymentRepoMongoDb';
+import { getQuizzesLessonU } from '../app/usecases/quiz/getQuiz';
+import { PaymentInfo } from './../types/payment';
 
 const courseController = (
     cloudServiceInterface: CloudServiceInterface,
