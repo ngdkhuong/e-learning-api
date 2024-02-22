@@ -8,12 +8,12 @@ import { refreshTokenDbRepository } from '../../../app/repositories/refreshToken
 import { refreshTokenRepositoryMongoDB } from '../../../frameworks/database/mongodb/repositories/refreshTokenRepoMongoDb';
 import { googleAuthServiceInterface } from './../../../app/services/googleAuthServiceInterface';
 import { googleAuthService } from './../../services/googleAuthService';
-import { cloudServiceInterface } from '@src/app/services/cloudServiceInterface';
-import { s3Service } from '@src/frameworks/services/s3CloudService';
-import { instructorDbRepository } from '@src/app/repositories/instructorDbRepository';
-import { instructorRepoMongoDb } from '@src/frameworks/database/mongodb/repositories/instructorRepoMongoDb';
-import { adminRepoMongoDb } from '@src/frameworks/database/mongodb/repositories/adminRepoMongoDb';
-import { adminDbRepository } from '@src/app/repositories/adminDbRepository';
+import { cloudServiceInterface } from '../../../app/services/cloudServiceInterface';
+import { s3Service } from '../../../frameworks/services/s3CloudService';
+import { instructorDbRepository } from '../../../app/repositories/instructorDbRepository';
+import { instructorRepoMongoDb } from '../../../frameworks/database/mongodb/repositories/instructorRepoMongoDb';
+import { adminRepoMongoDb } from '../../../frameworks/database/mongodb/repositories/adminRepoMongoDb';
+import { adminDbRepository } from '../../../app/repositories/adminDbRepository';
 import upload from '../middlewares/multer';
 
 const authRouter = () => {
