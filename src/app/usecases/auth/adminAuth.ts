@@ -1,9 +1,9 @@
-import { AdminDbInterface } from '@src/app/repositories/adminDbRepository';
-import { RefreshTokenDbInterface } from '@src/app/repositories/refreshTokenDBRepository';
-import { AuthServiceInterface } from '@src/app/services/authServiceInterface';
-import HttpStatusCodes from '@src/constants/HttpStatusCodes';
-import { AdminSavedDbInterface } from '@src/types/adminAuthInterface';
-import AppError from '@src/utils/appError';
+import { AdminDbInterface } from '../../../app/repositories/adminDbRepository';
+import { RefreshTokenDbInterface } from '../../../app/repositories/refreshTokenDBRepository';
+import { AuthServiceInterface } from '../../../app/services/authServiceInterface';
+import HttpStatusCodes from '../../../constants/HttpStatusCodes';
+import { AdminSavedDbInterface } from '../../../types/adminAuthInterface';
+import AppError from '../../../utils/appError';
 
 export const adminLogin = async (
     email: string,
