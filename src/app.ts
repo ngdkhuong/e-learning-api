@@ -8,11 +8,20 @@ import connectToRedis from './frameworks/database/redis/connection';
 import routes from './frameworks/webserver/routes';
 import AppError from './utils/appError';
 import errorHandlingMiddleware from './frameworks/webserver/middlewares/errorHandling';
+import { ClientToServerEvents, InterServerEvents, ServerToClientEvents, SocketData } from './types/socketInterfaces';
+import configKeys from './config';
 
 colors?.enable();
 
 const app: Application = express();
 const server = http.createServer(app);
+
+const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>(server, {
+    cors: {
+        origin: configKeys.ORIGIN_PORT,
+        methods: ['GET', 'POST'],
+    },
+});
 
 //* connecting mongoDb
 connectToMongoDb();
@@ -36,5 +45,9 @@ app.all('*', (req, res, next: NextFunction) => {
 
 // * starting the server with server config
 serverConfig(server).startServer();
+
+app.get('/', (req, res) => {
+    res.send('hello');
+});
 
 export type RedisClient = typeof redisClient;
