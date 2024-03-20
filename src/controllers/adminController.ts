@@ -6,6 +6,13 @@ import { InstructorDbInterface } from '../app/repositories/instructorDbRepositor
 import { InstructorRepositoryMongoDb } from '../frameworks/database/mongodb/repositories/instructorRepoMongoDb';
 import { StudentDbInterface } from '../app/repositories/studentsDbRepository';
 import { StudentRepositoryMongoDB } from '../frameworks/database/mongodb/repositories/studentsRepoMongoDb';
+import { PaymentInterface } from './../app/repositories/paymentDbRepository';
+import { PaymentImplInterface } from '../frameworks/database/mongodb/repositories/paymentRepoMongoDb';
+import { CategoryDbInterface } from '../../app/repositories/categoryDbRepository';
+import { CategoryRepoMongoDbInterface } from '../../frameworks/database/mongodb/repositories/categoryRepoMongoDb';
+import asyncHandler from 'express-async-handler';
+import { Request, Response } from 'express';
+import { getDashBoardDetailsU, getGraphDetailsU } from '../../app/usecases/admin/dashBoardData';
 
 const adminController = (
     adminDbRepository: AdminDbInterface,
@@ -22,10 +29,40 @@ const adminController = (
     categoryDbRepositoryImpl: CategoryRepoMongoDbInterface,
 ) => {
     const dbRepositoryAdmin = adminDbRepository(adminDbRepositoryImpl());
-
     const dbRepositoryCourse = courseDbRepository(courseDbRepositoryImpl());
-
     const dbRepositoryInstructor = instructorDbRepository(instructorDbRepositoryImpl());
-
     const dbRepositoryStudent = studentDbRepository(studentDbRepositoryImpl());
+    const dbRepositoryPayment = paymentDbRepository(paymentDbRepositoryImpl());
+    const dbRepositoryCategory = categoryDbRepository(categoryDbRepositoryImpl());
+
+    const getDashBoardDetails = asyncHandler(async (req: Request, res: Response) => {
+        const response = await getDashBoardDetailsU(
+            dbRepositoryCourse,
+            dbRepositoryInstructor,
+            dbRepositoryStudent,
+            dbRepositoryPayment,
+        );
+
+        res.status(200).json({
+            status: 'success',
+            message: 'Successfully retrieved dashboard details',
+            data: response,
+        });
+    });
+
+    const getGraphDetails = asyncHandler(async (req: Request, res: Response) => {
+        const response = await getGraphDetailsU(dbRepositoryCourse, dbRepositoryCategory, dbRepositoryPayment);
+        res.status(200).json({
+            status: 'success',
+            message: 'Successfully retrieved graph details',
+            data: response,
+        });
+    });
+
+    return {
+        getDashBoardDetails,
+        getGraphDetails,
+    };
 };
+
+export default adminController;

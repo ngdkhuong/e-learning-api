@@ -1,7 +1,7 @@
 import { PaymentInfo } from '../../types/payment';
 import { PaymentImplInterface } from '../../frameworks/database/mongodb/repositories/paymentRepoMongoDb';
 
-export const paymentInterface = (repository: ReturnType<PaymentImplInterface>) => {
+export const PaymentInterface = (repository: ReturnType<PaymentImplInterface>) => {
     const savePayment = async (paymentInfo: PaymentInfo) => await repository.savePaymentInfo(paymentInfo);
 
     const getMonthlyRevenue = async () => await repository.getMonthlyRevenue();
@@ -18,4 +18,4 @@ export const paymentInterface = (repository: ReturnType<PaymentImplInterface>) =
     };
 };
 
-export type PaymentInterface = typeof paymentInterface;
+export type PaymentInterface = typeof PaymentInterface;
