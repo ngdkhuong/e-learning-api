@@ -1,6 +1,6 @@
 import HttpStatusCodes from '../../constants/HttpStatusCodes';
 import { AuthServiceInterface } from '../services/authServiceInterface';
-import { StudentDbInterface, studentDbRepository } from '../repositories/studentsDbRepository';
+import { StudentDbInterface, studentDbRepository } from '../repositories/studentDbRepository';
 import AppError from '../../utils/appError';
 import { StudentInterface, StudentUpdateInfo } from '../../types/studentInterface';
 import { CloudServiceInterface } from '../services/cloudServiceInterface';

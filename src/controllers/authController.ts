@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
 import { AuthServiceInterface } from '../app/services/authServiceInterface';
 import { AuthService } from '../frameworks/services/authService';
-import { StudentDbInterface } from '../app/repositories/studentsDbRepository';
+import { StudentDbInterface } from '../app/repositories/studentDbRepository';
 import { StudentRepositoryMongoDB } from './../frameworks/database/mongodb/repositories/studentsRepoMongoDb';
 import { studentLogin, studentRegister, signInWithGoogle } from '../app/usecases/auth/studentAuth';
 import { StudentRegisterInterface } from '../types/studentRegisterInterface';

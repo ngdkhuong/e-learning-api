@@ -1,4 +1,4 @@
-import { StudentDbInterface } from '@src/app/repositories/studentsDbRepository';
+import { StudentDbInterface } from '@src/app/repositories/studentDbRepository';
 import { CloudServiceInterface } from '@src/app/services/cloudServiceInterface';
 import { StudentInterface } from '@src/types/studentInterface';
 import AppError from './../../../utils/appError';

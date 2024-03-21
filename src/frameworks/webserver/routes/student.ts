@@ -1,6 +1,6 @@
 import express from 'express';
 import { RedisClient } from '../../../app';
-import { studentDbRepository } from './../../../app/repositories/studentsDbRepository';
+import { studentDbRepository } from '../../../app/repositories/studentDbRepository';
 import { studentRepositoryMongoDB } from './../../database/mongodb/repositories/studentsRepoMongoDb';
 import studentController from './../../../controllers/studentController';
 import { authService } from '../../../frameworks/services/authService';

@@ -4,7 +4,7 @@ import { AdminRepositoryMongoDb } from '../frameworks/database/mongodb/repositor
 import { CourseRepositoryMongoDbInterface } from '../frameworks/database/mongodb/repositories/courseRepoMongoDb';
 import { InstructorDbInterface } from '../app/repositories/instructorDbRepository';
 import { InstructorRepositoryMongoDb } from '../frameworks/database/mongodb/repositories/instructorRepoMongoDb';
-import { StudentDbInterface } from '../app/repositories/studentsDbRepository';
+import { StudentDbInterface } from '../app/repositories/studentDbRepository';
 import { StudentRepositoryMongoDB } from '../frameworks/database/mongodb/repositories/studentsRepoMongoDb';
 import { PaymentInterface } from './../app/repositories/paymentDbRepository';
 import { PaymentImplInterface } from '../frameworks/database/mongodb/repositories/paymentRepoMongoDb';

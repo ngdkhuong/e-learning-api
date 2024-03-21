@@ -1,7 +1,7 @@
 import { StudentRegisterInterface } from '@src/types/studentRegisterInterface';
 import HttpStatusCodes from '../../../constants/HttpStatusCodes';
 import AppError from '../../../utils/appError';
-import { StudentDbInterface } from '../../repositories/studentsDbRepository';
+import { StudentDbInterface } from '../../repositories/studentDbRepository';
 import { RefreshTokenDbInterface } from '../../repositories/refreshTokenDBRepository';
 import { AuthServiceInterface } from '../../services/authServiceInterface';
 import { StudentInterface } from '@src/types/studentInterface';

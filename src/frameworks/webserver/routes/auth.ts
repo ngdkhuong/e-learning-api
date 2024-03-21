@@ -3,7 +3,7 @@ import authController from '../../../controllers/authController';
 import { authServiceInterface } from './../../../app/services/authServiceInterface';
 import { authService } from './../../services/authService';
 import { studentRepositoryMongoDB } from './../../database/mongodb/repositories/studentsRepoMongoDb';
-import { studentDbRepository } from '../../../app/repositories/studentsDbRepository';
+import { studentDbRepository } from '../../../app/repositories/studentDbRepository';
 import { refreshTokenDbRepository } from '../../../app/repositories/refreshTokenDBRepository';
 import { refreshTokenRepositoryMongoDB } from '../../../frameworks/database/mongodb/repositories/refreshTokenRepoMongoDb';
 import { googleAuthServiceInterface } from './../../../app/services/googleAuthServiceInterface';

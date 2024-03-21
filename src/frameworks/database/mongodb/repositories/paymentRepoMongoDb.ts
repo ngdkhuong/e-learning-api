@@ -1,7 +1,7 @@
 import Payment from '../models/payment';
 import { PaymentInfo } from '../../../../types/payment';
 
-export const PaymentRepositoryMongoDb = () => {
+export const paymentRepositoryMongoDb = () => {
     const savePaymentInfo = async (paymentInfo: PaymentInfo) => {
         const newPaymentInfo = new Payment(paymentInfo);
         const response = await newPaymentInfo.save();
@@ -80,4 +80,4 @@ export const PaymentRepositoryMongoDb = () => {
     };
 };
 
-export type PaymentImplInterface = typeof PaymentRepositoryMongoDb;
+export type paymentImplInterface = typeof paymentRepositoryMongoDb;

@@ -1,5 +1,5 @@
 import { RedisClient } from '../app';
-import { StudentDbInterface } from '../app/repositories/studentsDbRepository';
+import { StudentDbInterface } from '../app/repositories/studentDbRepository';
 import { AuthServiceInterface } from '../app/services/authServiceInterface';
 import { changePasswordU, getStudentDetailsU, updateProfileU } from '../app/usecases/student';
 import { StudentRepositoryMongoDB } from '../frameworks/database/mongodb/repositories/studentsRepoMongoDb';
