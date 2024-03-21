@@ -1,13 +1,13 @@
-import { addCategoryU, getAllCategoryU, getCategoryByIdU, editCategoryU } from '../../app/usecases/category';
-import { CategoryDbInterface } from '../../app/repositories/categoryDbRepository';
-import { CategoryRepoMongodbInterface } from '../../frameworks/database/mongodb/repositories/categoryRepoMongoDb';
+import { addCategoryU, getAllCategoryU, getCategoryByIdU, editCategoryU } from '../app/usecases/category';
+import { CategoryDbInterface } from '../app/repositories/categoryDbRepository';
+import { CategoryRepoMongoDbInterface } from '../frameworks/database/mongodb/repositories/categoryRepoMongoDb';
 import asyncHandler from 'express-async-handler';
 import { Request, Response } from 'express';
-import { CategoryInterface } from '../../types/category';
+import { CategoryInterface } from '../types/category';
 
 const categoryController = (
     categoryDbRepository: CategoryDbInterface,
-    categoryDbRepositoryImpl: CategoryRepoMongodbInterface,
+    categoryDbRepositoryImpl: CategoryRepoMongoDbInterface,
 ) => {
     const dbRepositoryCategory = categoryDbRepository(categoryDbRepositoryImpl());
 
