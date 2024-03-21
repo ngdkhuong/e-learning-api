@@ -1,56 +1,37 @@
-import crypto from 'crypto';
-import { cloudinaryConfig } from '../../utils/cloudinaryConfig';
+import { v2 as cloudinary } from 'cloudinary';
+import configKeys from './../../config';
+import { UploadApiResponse } from 'cloudinary';
+
+cloudinary.config({
+    cloud_name: configKeys.CLOUDINARY_URL,
+    api_key: configKeys.CLOUDINARY_API_KEY,
+    api_secret: configKeys.CLOUDINARY_API_SECRET,
+});
 
 export const cloudinaryService = () => {
-    const uploadFile = async (file: Express.Multer.File) => {
-        const result = await cloudinaryConfig.uploader.upload(() => {
-            if (error) {
-                throw error;
-            }
-            // Xử lý sau khi tải lên thành công
-            console.log(result);
-        });
-
-        return {
-            name: file.originalname,
-            key: result.public_id,
-        };
-    };
-
-    const uploadAndGetUrl = async (file: Express.Multer.File) => {
-        const result = await cloudinary.v2.uploader
-            .upload_stream((error, result) => {
-                if (error) {
-                    throw error;
-                }
-                // Xử lý sau khi tải lên thành công
-                console.log(result);
-            })
-            .end(file.buffer);
-
-        const url = result.secure_url;
-
-        return {
-            name: file.originalname,
-            key: result.public_id,
-            url,
-        };
+    const uploadFile = async (file: Express.Multer.File): Promise<UploadApiResponse> => {
+        try {
+            const result = await cloudinary.uploader.upload('courses');
+            return result;
+        } catch (error) {
+            throw new Error('Failed to upload file to Cloudinary');
+        }
     };
 
     const getFile = async (fileKey: string) => {
-        // Bạn có thể sử dụng Cloudinary SDK để tạo URL có thời hạn cho file
-        // Tuy nhiên, trong ví dụ này, chúng ta chỉ trả về URL cố định
-        return `https://res.cloudinary.com/YOUR_CLOUD_NAME/raw/upload/${fileKey}`;
+        return cloudinary.url(fileKey);
     };
 
-    const removeFile = async (fileKey: string) => {
-        // Cloudinary tự quản lý xóa file khi bạn gọi API xóa
-        await cloudinary.v2.uploader.destroy(fileKey, { resource_type: 'raw' });
+    const removeFile = async (fileKey: string): Promise<void> => {
+        try {
+            await cloudinary.uploader.destroy(fileKey);
+        } catch (error) {
+            throw new Error('Failed to delete file from Cloudinary');
+        }
     };
 
     return {
         uploadFile,
-        uploadAndGetUrl,
         getFile,
         removeFile,
     };

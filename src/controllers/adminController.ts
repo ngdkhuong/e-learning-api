@@ -6,13 +6,13 @@ import { InstructorDbInterface } from '../app/repositories/instructorDbRepositor
 import { InstructorRepositoryMongoDb } from '../frameworks/database/mongodb/repositories/instructorRepoMongoDb';
 import { StudentDbInterface } from '../app/repositories/studentDbRepository';
 import { StudentRepositoryMongoDB } from '../frameworks/database/mongodb/repositories/studentsRepoMongoDb';
-import { PaymentInterface } from './../app/repositories/paymentDbRepository';
+import { PaymentInterface } from '../app/repositories/paymentDbRepository';
 import { PaymentImplInterface } from '../frameworks/database/mongodb/repositories/paymentRepoMongoDb';
-import { CategoryDbInterface } from '../../app/repositories/categoryDbRepository';
-import { CategoryRepoMongoDbInterface } from '../../frameworks/database/mongodb/repositories/categoryRepoMongoDb';
+import { CategoryDbInterface } from '../app/repositories/categoryDbRepository';
+import { CategoryRepoMongoDbInterface } from '../frameworks/database/mongodb/repositories/categoryRepoMongoDb';
 import asyncHandler from 'express-async-handler';
 import { Request, Response } from 'express';
-import { getDashBoardDetailsU, getGraphDetailsU } from '../../app/usecases/admin/dashBoardData';
+import { getDashBoardDetailsU, getGraphDetailsU } from '../app/usecases/admin/dashBoardData';
 
 const adminController = (
     adminDbRepository: AdminDbInterface,

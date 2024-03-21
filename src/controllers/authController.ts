@@ -15,7 +15,7 @@ import { InstructorRepositoryMongoDb } from '../frameworks/database/mongodb/repo
 import { InstructorInterface } from '../types/instructorInterface';
 import { instructorLogin, instructorRegister } from '../app/usecases/auth/instructorAuth';
 import { CloudServiceInterface } from '../app/services/cloudServiceInterface';
-import { CloudServiceImpl } from '../frameworks/services/s3CloudService';
+import { CloudServiceImpl } from '../frameworks/services/CloudinaryService';
 import { adminLogin } from '../app/usecases/auth/adminAuth';
 import { AdminDbInterface } from '../app/repositories/adminDbRepository';
 import { AdminRepositoryMongoDb } from '../frameworks/database/mongodb/repositories/adminRepoMongoDb';
