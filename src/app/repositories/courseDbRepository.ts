@@ -1,5 +1,5 @@
-import { CourseRepositoryMongoDbInterface } from '@src/frameworks/database/mongodb/repositories/courseRepoMongoDb';
-import { AddCourseInfoInterface, EditCourseInfo } from '@src/types/courseInterface';
+import { CourseRepositoryMongoDbInterface } from '../../frameworks/database/mongodb/repositories/courseRepoMongoDb';
+import { AddCourseInfoInterface, EditCourseInfo } from '../../types/courseInterface';
 
 export const courseDbRepository = (repository: ReturnType<CourseRepositoryMongoDbInterface>) => {
     const addCourse = async (courseInfo: AddCourseInfoInterface) => await repository.addCourse(courseInfo);

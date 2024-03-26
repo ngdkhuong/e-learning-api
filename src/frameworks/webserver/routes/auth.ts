@@ -9,7 +9,7 @@ import { refreshTokenRepositoryMongoDB } from '../../../frameworks/database/mong
 import { googleAuthServiceInterface } from './../../../app/services/googleAuthServiceInterface';
 import { googleAuthService } from './../../services/googleAuthService';
 import { cloudServiceInterface } from '../../../app/services/cloudServiceInterface';
-import { s3Service } from '../../../frameworks/services/s3CloudService';
+import { cloudinaryService } from '../../../frameworks/services/CloudinaryService';
 import { instructorDbRepository } from '../../../app/repositories/instructorDbRepository';
 import { instructorRepoMongoDb } from '../../../frameworks/database/mongodb/repositories/instructorRepoMongoDb';
 import { adminRepoMongoDb } from '../../../frameworks/database/mongodb/repositories/adminRepoMongoDb';
@@ -23,7 +23,7 @@ const authRouter = () => {
         authServiceInterface,
         authService,
         cloudServiceInterface,
-        s3Service,
+        cloudinaryService,
         studentDbRepository,
         studentRepositoryMongoDB,
         instructorDbRepository,

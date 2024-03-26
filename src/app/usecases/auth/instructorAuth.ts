@@ -1,10 +1,10 @@
 import { InstructorInterface, SavedInstructorInterface } from '../../../types/instructorInterface';
 import { InstructorDbInterface } from '../../../app/repositories/instructorDbRepository';
 import { AuthServiceInterface } from '../../../app/services/authServiceInterface';
-import { RefreshTokenDbInterface } from '@src/app/repositories/refreshTokenDBRepository';
-import { UploadFileInterface } from '@src/types/common';
+import { RefreshTokenDbInterface } from '../../../app/repositories/refreshTokenDBRepository';
+import { UploadFileInterface } from '../../../types/common';
 import AppError from '../../../utils/appError';
-import { CloudServiceInterface } from '@src/app/services/cloudServiceInterface';
+import { CloudServiceInterface } from '../../../app/services/cloudServiceInterface';
 import HttpStatusCodes from './../../../constants/HttpStatusCodes';
 
 export const instructorRegister = async (

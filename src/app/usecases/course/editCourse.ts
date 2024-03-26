@@ -27,17 +27,23 @@ export const editCourseU = async (
         throw new AppError('Please provide course details', HttpStatusCodes.BAD_REQUEST);
     }
 
-    const oldCourse = await courseDbRepository.getCourseById(courseId);
-
     if (files && files.length > 0) {
         const uploadPromises = files.map(async (file) => {
+            let uploadedFile;
+
             if (file.mimetype === 'application/pdf') {
-                const guidelines = await cloudService.upload(file);
-                courseInfo.guidelines = guidelines;
+                uploadedFile = await cloudService.upload(file);
+                courseInfo.guidelines = {
+                    key: uploadedFile.key,
+                    url: uploadedFile.url,
+                };
                 isGuideLinesUpdated = true;
             } else {
-                const thumbnail = await cloudService.upload(file);
-                courseInfo.thumbnail = thumbnail;
+                uploadedFile = await cloudService.upload(file);
+                courseInfo.thumbnail = {
+                    key: uploadedFile.key,
+                    url: uploadedFile.url,
+                };
                 isThumbnailUpdated = true;
             }
         });
@@ -59,14 +65,16 @@ export const editCourseU = async (
         courseInfo.requirements = courseInfo.requirements.split(',');
     }
 
+    const oldCourse = await courseDbRepository.getCourseById(courseId);
+
     const response = await courseDbRepository.editCourse(courseId, courseInfo);
 
     if (response) {
         if (isGuideLinesUpdated && oldCourse?.guidelines) {
-            await cloudService.removeFile(oldCourse.guidelines.key);
+            await cloudService.removeFile(oldCourse?.guidelines.key);
         }
         if (isThumbnailUpdated && oldCourse?.thumbnail) {
-            await cloudService.removeFile(oldCourse.thumbnail.key);
+            await cloudService.removeFile(oldCourse?.thumbnail.key);
         }
     }
 };

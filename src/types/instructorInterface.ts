@@ -2,7 +2,6 @@ export interface InstructorInterface {
     firstName: string;
     lastName: string;
     profilePic: {
-        name: string;
         key?: string;
         url?: string;
     };
@@ -18,7 +17,6 @@ export interface InstructorInterface {
 }
 
 export interface Certificate {
-    name: string;
     url?: string;
     key?: string;
 }
@@ -27,6 +25,6 @@ export interface SavedInstructorInterface extends InstructorInterface {
     _id: string;
     isVerified: boolean;
     dateJoined: Date;
-    coursesCreated: Array<string>;
+    coursesCreated: Array<String>;
     profileUrl: string;
 }

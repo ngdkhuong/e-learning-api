@@ -1,18 +1,18 @@
 import express from 'express';
-import courseController from '../../../adapters/controllers/courseController';
-import { courseRepositoryMongodb } from '../../../frameworks/database/mongodb/repositories/courseReposMongoDb';
+import courseController from '../../../controllers/courseController';
+import { courseRepositoryMongoDb } from '../../../frameworks/database/mongodb/repositories/courseRepoMongoDb';
 import { courseDbRepository } from '../../../app/repositories/courseDbRepository';
 import roleCheckMiddleware from '../middlewares/roleCheckMiddleware';
 import { cloudServiceInterface } from '../../../app/services/cloudServiceInterface';
-import { s3Service } from '../../../frameworks/services/s3CloudService';
+import { cloudinaryService } from '../../../frameworks/services/CloudinaryService';
 import upload from '../middlewares/multer';
 import { quizDbRepository } from '../../../app/repositories/quizDbRepository';
-import { quizRepositoryMongodb } from '../../../frameworks/database/mongodb/repositories/quizzDbRepository';
+import { quizRepositoryMongoDb } from '../../../frameworks/database/mongodb/repositories/quizDbRepository';
 import { lessonDbRepository } from '../../../app/repositories/lessonDbRepository';
-import { lessonRepositoryMongodb } from '../../../frameworks/database/mongodb/repositories/lessonRepoMongodb';
+import { lessonRepositoryMongoDb } from '../../../frameworks/database/mongodb/repositories/lessonRepoMongoDb';
 import { discussionDbRepository } from '../../../app/repositories/discussionDbRepository';
-import { discussionRepositoryMongoDb } from '../../../frameworks/database/mongodb/repositories/discussionsRepoMongodb';
-import { paymentRepositoryMongodb } from '../../../frameworks/database/mongodb/repositories/paymentRepoMongodb';
+import { discussionRepositoryMongoDb } from '../../../frameworks/database/mongodb/repositories/discussionsRepoMongoDb';
+import { paymentRepositoryMongoDb } from '../../../frameworks/database/mongodb/repositories/paymentRepoMongoDb';
 import { paymentInterface } from '../../../app/repositories/paymentDbRepository';
 import jwtAuthMiddleware from '../middlewares/userAuth';
 import { redisCacheRepository } from '../../../frameworks/database/redis/redisCacheRepository';
@@ -24,17 +24,17 @@ const courseRouter = (redisClient: RedisClient) => {
     const router = express.Router();
     const controller = courseController(
         cloudServiceInterface,
-        s3Service,
+        cloudinaryService,
         courseDbRepository,
-        courseRepositoryMongodb,
+        courseRepositoryMongoDb,
         quizDbRepository,
-        quizRepositoryMongodb,
+        quizRepositoryMongoDb,
         lessonDbRepository,
-        lessonRepositoryMongodb,
+        lessonRepositoryMongoDb,
         discussionDbRepository,
         discussionRepositoryMongoDb,
         paymentInterface,
-        paymentRepositoryMongodb,
+        paymentRepositoryMongoDb,
         cacheRepositoryInterface,
         redisCacheRepository,
         redisClient,

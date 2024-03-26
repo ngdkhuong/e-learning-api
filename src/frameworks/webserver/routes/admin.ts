@@ -8,8 +8,8 @@ import { instructorDbRepository } from '../../../app/repositories/instructorDbRe
 import { instructorRepoMongoDb } from '../../../frameworks/database/mongodb/repositories/instructorRepoMongoDb';
 import { studentDbRepository } from '../../../app/repositories/studentDbRepository';
 import { studentRepositoryMongoDB } from '../../../frameworks/database/mongodb/repositories/studentsRepoMongoDb';
-import { PaymentInterface } from '../../../app/repositories/paymentDbRepository';
-import { PaymentRepositoryMongoDb } from '../../../frameworks/database/mongodb/repositories/paymentRepoMongoDb';
+import { paymentInterface } from '../../../app/repositories/paymentDbRepository';
+import { paymentRepositoryMongoDb } from '../../../frameworks/database/mongodb/repositories/paymentRepoMongoDb';
 import { categoryDbInterface } from '../../../app/repositories/categoryDbRepository';
 import { categoryRepositoryMongoDb } from '../../../frameworks/database/mongodb/repositories/categoryRepoMongoDb';
 
@@ -24,8 +24,8 @@ const adminRouter = () => {
         instructorRepoMongoDb,
         studentDbRepository,
         studentRepositoryMongoDB,
-        PaymentInterface,
-        PaymentRepositoryMongoDb,
+        paymentInterface,
+        paymentRepositoryMongoDb,
         categoryDbInterface,
         categoryRepositoryMongoDb,
     );

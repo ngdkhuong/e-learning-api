@@ -2,11 +2,12 @@ import { Question } from './lesson';
 
 interface fileSchema {
     key: string;
-    name: string;
     url?: string;
 }
 
 export interface AddCourseInfoInterface {
+    [x: string]: any;
+    courseInfo: any;
     title: string;
     duration: number;
     category: string;
@@ -47,23 +48,22 @@ export interface EditQuizInfoInterface {
 
 export interface EditCourseInfo {
     title?: string;
-    duration?: number;
-    category?: string;
-    tags?: string[] | string;
-    price?: number;
-    isPaid?: boolean;
-    about?: string;
-    description?: string;
-    syllabus?: string[] | string;
-    requirements?: string[] | string;
     thumbnail?: fileSchema;
-    introductionVideo?: fileSchema;
     guidelines?: fileSchema;
+    introductionVideo?: string;
+    description?: string;
+    category?: string;
     instructorId?: string;
+    price?: number;
+    enrollmentCount?: number;
     rating?: number;
     isVerified?: boolean;
-    enrollmentCount?: number;
+    isPaid?: boolean;
+    duration?: number;
+    syllabus: string[] | string;
+    requirements?: string[] | string;
     quiz?: AddQuizInfoInterface;
+    tags?: string[] | string;
     enrollmentLimit?: number;
     completionStatus?: number;
 }

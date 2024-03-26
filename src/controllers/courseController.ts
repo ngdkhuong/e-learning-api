@@ -5,7 +5,7 @@ import { CourseDbRepositoryInterface } from '../app/repositories/courseDbReposit
 import { CloudServiceInterface } from '../app/services/cloudServiceInterface';
 import { CourseRepositoryMongoDbInterface } from '../frameworks/database/mongodb/repositories/courseRepoMongoDb';
 import { RedisRepositoryImpl } from '../frameworks/database/redis/redisCacheRepository';
-import { CloudServiceImpl } from '../frameworks/services/s3CloudService';
+import { CloudServiceImpl } from '../frameworks/services/CloudinaryService';
 import { Request, NextFunction, Response } from 'express';
 import { AddCourseInfoInterface, EditCourseInfo } from '../types/courseInterface';
 import { addCourses } from '../app/usecases/course/addCourse';

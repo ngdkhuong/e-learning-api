@@ -8,8 +8,9 @@ import connectToRedis from './frameworks/database/redis/connection';
 import routes from './frameworks/webserver/routes';
 import AppError from './utils/appError';
 import errorHandlingMiddleware from './frameworks/webserver/middlewares/errorHandling';
-import { ClientToServerEvents, InterServerEvents, ServerToClientEvents, SocketData } from './types/socketInterfaces';
+import { ClientToServerEvents, InterServerEvents, ServerToClientEvents, SocketData } from './types/socketInterface';
 import configKeys from './config';
+import { Server } from 'socket.io';
 
 colors?.enable();
 
