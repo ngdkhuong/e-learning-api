@@ -1,4 +1,4 @@
-import HttpStatusCodes from '@src/constants/HttpStatusCodes';
+import HttpStatusCodes from '../../../constants/HttpStatusCodes';
 import { RefreshTokenDbInterface } from '../../repositories/refreshTokenDBRepository';
 import { AuthServiceInterface } from '../../services/authServiceInterface';
 import AppError from '../../../utils/appError';

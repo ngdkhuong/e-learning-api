@@ -1,10 +1,10 @@
-import { StudentRegisterInterface } from '@src/types/studentRegisterInterface';
+import { StudentRegisterInterface } from '../../../types/studentRegisterInterface';
 import HttpStatusCodes from '../../../constants/HttpStatusCodes';
 import AppError from '../../../utils/appError';
 import { StudentDbInterface } from '../../repositories/studentDbRepository';
 import { RefreshTokenDbInterface } from '../../repositories/refreshTokenDBRepository';
 import { AuthServiceInterface } from '../../services/authServiceInterface';
-import { StudentInterface } from '@src/types/studentInterface';
+import { StudentInterface } from '../../../types/studentInterface';
 import { GoogleAuthServiceInterface } from '../../../app/services/googleAuthServiceInterface';
 
 export const studentRegister = async (

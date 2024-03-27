@@ -1,11 +1,11 @@
 import express from 'express';
-import videoStreamController from '../../../adapters/controllers/videoStreamController';
-import { s3Service } from '../../../frameworks/services/s3CloudService';
+import videoStreamController from '../../../controllers/videoStreamController';
+import { cloudinaryService } from '../../../frameworks/services/CloudinaryService';
 import { cloudServiceInterface } from '../../../app/services/cloudServiceInterface';
 
 const videoStreamRouter = () => {
     const router = express.Router();
-    const controller = videoStreamController(cloudServiceInterface, s3Service);
+    const controller = videoStreamController(cloudServiceInterface, cloudinaryService);
 
     router.get('/stream-video/:videoFileId', controller.streamVideo);
 

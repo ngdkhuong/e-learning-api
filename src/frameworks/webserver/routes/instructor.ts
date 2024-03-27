@@ -9,7 +9,7 @@ import { courseRepositoryMongoDb } from '../../../frameworks/database/mongodb/re
 import { sendEmailServiceInterface } from '../../../app/services/sendEmailServiceInterface';
 import { sendEmailService } from '../../../frameworks/services/sendEmailService';
 import { cloudServiceInterface } from '../../../app/services/cloudServiceInterface';
-import { s3Service } from '../../../frameworks/services/s3CloudService';
+import { cloudinaryService } from '../../../frameworks/services/CloudinaryService';
 import jwtAuthMiddleware from '../middlewares/userAuth';
 import roleCheckMiddleware from '../middlewares/roleCheckMiddleware';
 import upload from '../middlewares/multer';
@@ -26,7 +26,7 @@ const instructorRouter = () => {
         sendEmailServiceInterface,
         sendEmailService,
         cloudServiceInterface,
-        s3Service,
+        cloudinaryService,
     );
 
     // * Instructor management

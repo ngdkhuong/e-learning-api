@@ -1,8 +1,8 @@
-import { InstructorDbInterface } from '@src/app/repositories/instructorDbRepository';
+import { InstructorDbInterface } from '../../../app/repositories/instructorDbRepository';
 import AppError from '../../../utils/appError';
 import HttpStatusCodes from './../../../constants/HttpStatusCodes';
-import { CloudServiceInterface } from '@src/app/services/cloudServiceInterface';
-import { SendEmailService } from '@src/frameworks/services/sendEmailService';
+import { CloudServiceInterface } from '../../../app/services/cloudServiceInterface';
+import { SendEmailService } from '../../../frameworks/services/sendEmailService';
 
 export const getAllInstructorRequests = async (instructorRepository: ReturnType<InstructorDbInterface>) => {
     const allRequests = await instructorRepository.getInstructorRequests();

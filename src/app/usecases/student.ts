@@ -39,7 +39,7 @@ export const updateProfileU = async (
     id: string | undefined,
     studentInfo: StudentUpdateInfo,
     profilePic: Express.Multer.File,
-    // cloudService: ReturnType<CloudServiceInterface>,
+    cloudService: ReturnType<CloudServiceInterface>,
     studentDbRepository: ReturnType<StudentDbInterface>,
 ) => {
     if (!id) {
@@ -48,25 +48,25 @@ export const updateProfileU = async (
     if (Object.keys(studentInfo).length === 0) {
         throw new AppError('At least update a single field', HttpStatusCodes.BAD_REQUEST);
     }
-    // if (profilePic) {
-    //     const response = await cloudService.upload(profilePic);
-    //     studentInfo.profilePic = response;
-    // }
+    if (profilePic) {
+        const response = await cloudService.upload(profilePic);
+        studentInfo.profilePic = response;
+    }
     await studentDbRepository.updateProfile(id, studentInfo);
 };
 
 export const getStudentDetailsU = async (
     id: string | undefined,
-    // cloudService: ReturnType<CloudServiceInterface>,
+    cloudService: ReturnType<CloudServiceInterface>,
     studentDbRepository: ReturnType<StudentDbInterface>,
 ) => {
     if (!id) {
         throw new AppError('Please provide a valid student id', HttpStatusCodes.BAD_REQUEST);
     }
     const studentDetails: StudentInterface | null = await studentDbRepository.getStudent(id);
-    // if (studentDetails?.profilePic?.key) {
-    //     studentDetails.profilePic.url = await cloudService.getFile(studentDetails.profilePic.key);
-    // }
+    if (studentDetails?.profilePic?.key) {
+        studentDetails.profilePic.url = await cloudService.getFile(studentDetails.profilePic.key);
+    }
     if (studentDetails) {
         studentDetails.password = 'no password';
     }

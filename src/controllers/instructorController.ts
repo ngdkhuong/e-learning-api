@@ -18,7 +18,7 @@ import {
 import { CourseRepositoryMongoDbInterface } from '../frameworks/database/mongodb/repositories/courseRepoMongoDb';
 import { InstructorRepositoryMongoDb } from '../frameworks/database/mongodb/repositories/instructorRepoMongoDb';
 import { AuthService } from '../frameworks/services/authService';
-import { CloudServiceImpl } from '../frameworks/services/s3CloudService';
+import { CloudServiceImpl } from '../frameworks/services/CloudinaryService';
 import { SendEmailService } from '../frameworks/services/sendEmailService';
 import { CustomRequest } from '../types/customRequest';
 import { changePasswordU, getStudentsForInstructorsU, updateProfileU } from '../app/usecases/instructor';

@@ -5,10 +5,7 @@ export interface CreateLessonInterface {
     duration: number;
     instructorId: string;
     courseId: string;
-    media: {
-        name: string;
-        key: string;
-    }[];
+    media: { name: string; key: string }[];
     questions: Question[];
 }
 

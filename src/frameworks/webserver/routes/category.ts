@@ -1,12 +1,12 @@
 import express from 'express';
-import categoryController from '../../../adapters/controllers/categoryController';
+import categoryController from '../../../controllers/categoryController';
 import { categoryDbInterface } from '../../../app/repositories/categoryDbRepository';
-import { categoryRepositoryMongodb } from '../../../frameworks/database/mongodb/repositories/categoryRepoMongoDb';
+import { categoryRepositoryMongoDb } from '../../../frameworks/database/mongodb/repositories/categoryRepoMongoDb';
 
 const categoryRouter = () => {
     const router = express.Router();
 
-    const controller = categoryController(categoryDbInterface, categoryRepositoryMongodb);
+    const controller = categoryController(categoryDbInterface, categoryRepositoryMongoDb);
 
     router.post('/add-category', controller.addCategory);
 

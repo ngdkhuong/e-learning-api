@@ -1,11 +1,11 @@
-import { StudentDbInterface } from '@src/app/repositories/studentDbRepository';
-import { CloudServiceInterface } from '@src/app/services/cloudServiceInterface';
-import { StudentInterface } from '@src/types/studentInterface';
+import { StudentDbInterface } from '../../../app/repositories/studentDbRepository';
+import { CloudServiceInterface } from '../../../app/services/cloudServiceInterface';
+import { StudentInterface } from '../../../types/studentInterface';
 import AppError from './../../../utils/appError';
 import HttpStatusCodes from './../../../constants/HttpStatusCodes';
 
 export const getAllStudentsU = async (
-    // cloudService: ReturnType<CloudServiceInterface>,
+    cloudService: ReturnType<CloudServiceInterface>,
     studentRepository: ReturnType<StudentDbInterface>,
 ) => {
     const students: StudentInterface[] | null = await studentRepository.getAllStudents();
@@ -13,7 +13,7 @@ export const getAllStudentsU = async (
         students.map(async (student) => {
             if (student?.profilePic?.key) {
                 student.profileUrl = '';
-                // student.profileUrl = await cloudService.getFile(student.profilePic.key);
+                student.profileUrl = await cloudService.getFile(student.profilePic.key);
             }
         }),
     );
@@ -48,7 +48,7 @@ export const unblockStudentU = async (studentId: string, studentRepository: Retu
 };
 
 export const getAllBlockedStudentsU = async (
-    // cloudService: ReturnType<CloudServiceInterface>,
+    cloudService: ReturnType<CloudServiceInterface>,
     studentRepository: ReturnType<StudentDbInterface>,
 ) => {
     const blockedStudents: StudentInterface[] | null = await studentRepository.getAllBlockedStudents();
@@ -56,7 +56,7 @@ export const getAllBlockedStudentsU = async (
         blockedStudents.map(async (student) => {
             if (student?.profilePic?.key) {
                 student.profileUrl = '';
-                // student.profileUrl = await cloudService.getFile(student.profilePic.key);
+                student.profileUrl = await cloudService.getFile(student.profilePic.key);
             }
         }),
     );

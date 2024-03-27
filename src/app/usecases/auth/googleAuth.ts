@@ -1,8 +1,8 @@
-import { InstructorDbInterface } from '@src/app/repositories/instructorDbRepository';
-import { RefreshTokenDbInterface } from '@src/app/repositories/refreshTokenDBRepository';
-import { StudentDbInterface } from '@src/app/repositories/studentDbRepository';
-import { AuthServiceInterface } from '@src/app/services/authServiceInterface';
-import { GoogleAuthServiceInterface } from '@src/app/services/googleAuthServiceInterface';
+import { InstructorDbInterface } from '../../../app/repositories/instructorDbRepository';
+import { RefreshTokenDbInterface } from '../../../app/repositories/refreshTokenDBRepository';
+import { StudentDbInterface } from '../../../app/repositories/studentDbRepository';
+import { AuthServiceInterface } from '../../../app/services/authServiceInterface';
+import { GoogleAuthServiceInterface } from '../../../app/services/googleAuthServiceInterface';
 
 export const signInWithGoogle = async (
     credential: string,

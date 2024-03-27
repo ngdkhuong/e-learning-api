@@ -65,7 +65,16 @@ export const addLessonsU = async (
     }
 
     if (media) {
-        lesson.media = await Promise.all(media.map(async (files) => await cloudService.upload(files)));
+        lesson.media = await Promise.all(
+            media.map(async (files) => {
+                const uploadResponses = await cloudService.upload(files);
+                // Map UploadApiResponse objects to objects with name and key properties
+                return uploadResponses.map((response: any) => ({
+                    name: response.fileName,
+                    key: response.fileKey,
+                }));
+            }),
+        );
     }
 
     const lessonId = await lessonDbRepository.addLesson(courseId, instructorId, lesson);

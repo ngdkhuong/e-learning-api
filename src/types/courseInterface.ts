@@ -43,7 +43,7 @@ export interface AddQuizInfoInterface {
 export interface EditQuizInfoInterface {
     courseId?: string;
     lessonId?: string;
-    questions: Question[];
+    questions?: Question[];
 }
 
 export interface EditCourseInfo {

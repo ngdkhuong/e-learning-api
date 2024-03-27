@@ -1,4 +1,4 @@
-import { CreateLessonInterface } from '../../../types/lesson';
+import { EditLessonInterface } from '../../../types/lesson';
 import { CloudServiceInterface } from '../../../app/services/cloudServiceInterface';
 import HttpStatusCodes from '../../../constants/HttpStatusCodes';
 import { LessonDbRepositoryInterface } from '../../../app/repositories/lessonDbRepository';
@@ -11,7 +11,7 @@ import * as ffprobePath from 'ffprobe-static';
 export const editLessonsU = async (
     media: Express.Multer.File[] | undefined,
     lessonId: string,
-    lesson: CreateLessonInterface,
+    lesson: EditLessonInterface,
     lessonDbRepository: ReturnType<LessonDbRepositoryInterface>,
     cloudService: ReturnType<CloudServiceInterface>,
     quizDbRepository: ReturnType<QuizDbInterface>,
@@ -56,16 +56,28 @@ export const editLessonsU = async (
         }
     }
 
-    lesson.media = [];
+    if (!lesson.media) {
+        lesson.media = [];
+    }
+
     if (media && media.length > 0) {
         const uploadPromises = media.map(async (file) => {
             if (file.mimetype === 'application/pdf') {
                 const studyMaterial = await cloudService.upload(file);
-                lesson.media.push(studyMaterial);
-                isStudyMaterialUpdated = true;
+                if (studyMaterial.name && studyMaterial.key) {
+                    lesson.media?.push({ name: studyMaterial.name, key: studyMaterial.key });
+                    isStudyMaterialUpdated = true;
+                } else {
+                    throw new Error('Something went wrong!');
+                }
             } else {
                 const lessonVideo = await cloudService.upload(file);
-                lesson.media.push(lessonVideo);
+                if (lessonVideo.name && lessonVideo.key) {
+                    lesson.media?.push({ name: lessonVideo.name, key: lessonVideo.key });
+                    isLessonVideoUpdated = true;
+                } else {
+                    throw new Error('Something went wrong!');
+                }
                 isLessonVideoUpdated = true;
             }
         });

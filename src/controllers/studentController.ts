@@ -8,9 +8,9 @@ import { AuthService } from '../frameworks/services/authService';
 import { CustomRequest } from '../types/customRequest';
 import asyncHandler from 'express-async-handler';
 import { Request, Response } from 'express';
-import { CloudServiceImpl } from '@src/frameworks/services/s3CloudService';
+import { CloudServiceImpl } from '../frameworks/services/CloudinaryService';
 import { CacheRepositoryInterface } from '../app/repositories/cachedRepoInterface';
-import { CloudServiceInterface } from '@src/app/services/cloudServiceInterface';
+import { CloudServiceInterface } from '../app/services/cloudServiceInterface';
 import { ContactDbInterface } from '../app/repositories/contactRepoInterface';
 import { ContactRepoImpl } from '../frameworks/database/mongodb/repositories/contactRepoMongoDb';
 import { StudentUpdateInfo } from '../types/studentInterface';
@@ -67,13 +67,7 @@ const studentController = (
 
         const profilePic: Express.Multer.File = req.file as Express.Multer.File;
 
-        await updateProfileU(
-            studentId,
-            studentInfo,
-            profilePic,
-            // cloudService,
-            dbRepositoryStudent,
-        );
+        await updateProfileU(studentId, studentInfo, profilePic, cloudService, dbRepositoryStudent);
 
         await dbRepositoryCache.clearCache(studentId ?? '');
 
@@ -86,11 +80,7 @@ const studentController = (
 
     const getStudentDetails = asyncHandler(async (req: CustomRequest, res: Response) => {
         const studentId: string | undefined = req.user?.Id;
-        const studentDetails = await getStudentDetailsU(
-            studentId,
-            // cloudService,
-            dbRepositoryStudent,
-        );
+        const studentDetails = await getStudentDetailsU(studentId, cloudService, dbRepositoryStudent);
         const cacheOptions = {
             key: `${studentId}`,
             expireTimeSec: 600,
@@ -105,10 +95,7 @@ const studentController = (
     });
 
     const getAllStudents = asyncHandler(async (req: Request, res: Response) => {
-        const students = await getAllStudentsU(
-            // cloudService,
-            dbRepositoryStudent,
-        );
+        const students = await getAllStudentsU(cloudService, dbRepositoryStudent);
         res.status(200).json({
             status: 'success',
             message: 'Successfully retrieved all student details',
@@ -138,10 +125,7 @@ const studentController = (
     });
 
     const getAllBlockedStudents = asyncHandler(async (req: Request, res: Response) => {
-        const students = await getAllBlockedStudentsU(
-            // cloudService,
-            dbRepositoryStudent,
-        );
+        const students = await getAllBlockedStudentsU(cloudService, dbRepositoryStudent);
         res.status(200).json({
             status: 'success',
             message: 'Successfully retrieved all students',
